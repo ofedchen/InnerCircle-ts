@@ -10,6 +10,7 @@ import {
   ModalDialog,
 } from "@mui/joy";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import type { Membership, Tier } from "../types";
 
 type JoinCircleProps = {
   userId: string;
@@ -19,7 +20,7 @@ type JoinCircleProps = {
   handleMembership: (tier: string, ucId: number) => void;
   cancelMembership: (cancelled: boolean) => void;
   modalType: "manage" | "join";
-  userTier?: string;
+  userTier?: Tier;
 };
 
 function JoinCircle({
@@ -37,7 +38,7 @@ function JoinCircle({
 
   const handleJoin = async () => {
     if (chosenTier) {
-      const ucData = {
+      const ucData: Membership = {
         userId: userId,
         circleId: circleId,
         circleTier: chosenTier,
