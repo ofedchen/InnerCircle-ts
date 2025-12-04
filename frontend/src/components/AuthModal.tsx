@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Drawer } from "@mui/joy";
 import Signup from "./Signup.tsx";
-import Login from "./Login.jsx";
-import JoinCircle from "./JoinCircle.jsx";
+import Login from "./Login.tsx";
+import JoinCircle from "./JoinCircle.tsx";
 import type { Tier } from "../types.ts";
 
 type AuthProps = {
