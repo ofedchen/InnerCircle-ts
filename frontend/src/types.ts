@@ -14,3 +14,5 @@ export type LoginForm = {
 export type SignUpForm = {
   userName: string;
 } & LoginForm;
+
+export type ModalType = "login" | "signup" | "join" | "manage";

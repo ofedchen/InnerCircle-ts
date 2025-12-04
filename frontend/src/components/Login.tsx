@@ -1,19 +1,12 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
-} from "@mui/joy";
+import { Box, Button, FormControl, FormLabel, Input, Stack } from "@mui/joy";
 import type { LoginForm } from "../types.ts";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser.js";
+import { useUser } from "../hooks/useUser.ts";
+import type { ModalType } from "../types.ts";
 
 type LoginProps = {
-  modalType: string;
+  modalType: ModalType;
   toggleClose: () => void;
   toggleSignup: () => void;
   toggleJoin: () => void;

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Button, Drawer } from "@mui/joy";
 import Signup from "./Signup.tsx";
 import Login from "./Login.tsx";
-import JoinCircle from "./JoinCircle.jsx";
-import type { Tier } from "../types.ts";
+import JoinCircle from "./JoinCircle.tsx";
+import type { ModalType, Tier } from "../types.ts";
 
 type AuthProps = {
-  modalType: string;
+  modalType: ModalType;
   circleName?: string;
   circleId?: number;
   userId?: string;
@@ -149,23 +149,32 @@ const AuthModal = ({
         >
           <Signup toggleClose={closeSignup} toggleLogin={switchToLogin} />
         </Drawer>
-        <Drawer
-          anchor="bottom"
-          onClose={toggleJoinDrawer(false)}
-          open={joinOpen}
-          size={modalType === "join" ? "lg" : "sm"}
-        >
-          <JoinCircle
-            circleName={circleName}
-            circleId={circleId}
-            modalType={modalType}
-            handleMembership={handleJoin}
-            cancelMembership={handleCancel}
-            userId={userId}
-            userTier={userTier}
-            ucId={ucId}
-          />
-        </Drawer>
+        {(modalType === "join" || modalType === "manage") &&
+          circleName &&
+          circleId &&
+          userId &&
+          userTier &&
+          ucId &&
+          handleJoin &&
+          handleCancel && (
+            <Drawer
+              anchor="bottom"
+              onClose={toggleJoinDrawer(false)}
+              open={joinOpen}
+              size={modalType === "join" ? "lg" : "sm"}
+            >
+              <JoinCircle
+                circleName={circleName}
+                circleId={circleId}
+                modalType={modalType}
+                handleMembership={handleJoin}
+                cancelMembership={handleCancel}
+                userId={userId}
+                userTier={userTier}
+                ucId={ucId}
+              />
+            </Drawer>
+          )}
       </section>
     </section>
   );
