@@ -6,8 +6,11 @@ export type Membership = {
   chosenTier: Tier;
 };
 
-export type SignUpForm = {
-  userName: string;
+export type LoginForm = {
   email: string;
   password: string;
 };
+
+export type SignUpForm = {
+  userName: string;
+} & LoginForm;
