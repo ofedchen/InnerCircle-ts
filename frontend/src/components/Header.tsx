@@ -3,8 +3,8 @@ import { Box, Button, Drawer, IconButton, ModalClose } from "@mui/joy";
 import { MenuOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser.ts";
-import AuthModal from "./AuthModal.tsx";
+import { useUser } from "../hooks/useUser";
+import AuthModal from "./AuthModal";
 
 export default function Header() {
 	const { userId, logout } = useUser();
@@ -85,7 +85,7 @@ export default function Header() {
 									<Button
 										onClick={Logout}
 										variant="outlined"
-										color="secondary"
+										color="neutral"
 										sx={{ mt: 20 }}
 									>
 										LOG OUT

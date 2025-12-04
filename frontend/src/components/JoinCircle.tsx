@@ -33,7 +33,7 @@ function JoinCircle({
   modalType,
   userTier,
 }: JoinCircleProps) {
-  const [chosenTier, setChosenTier] = useState<string | null>(null);
+  const [chosenTier, setChosenTier] = useState<Tier | null>(null);
   const [open, setOpen] = useState<boolean>(false);
 
   const handleJoin = async () => {
@@ -81,7 +81,7 @@ function JoinCircle({
     }
   };
 
-  const tiers = [
+  const tiers: {value: Tier, label: Tier, price: string, color: string}[] = [
     {
       value: "Bronze",
       label: "Bronze",

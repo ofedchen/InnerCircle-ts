@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Button, FormControl, FormLabel, Input, Stack } from "@mui/joy";
 import type { LoginForm } from "../types.ts";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser.ts";
+import { useUser } from "../hooks/useUser";
 import type { ModalType } from "../types.ts";
 
 type LoginProps = {
