@@ -1,8 +1,21 @@
 import { useState } from "react";
 import { Button, Drawer } from "@mui/joy";
-import Signup from "../components/Signup";
-import Login from "../components/Login";
-import JoinCircle from "./JoinCircle";
+import Signup from "./Signup.jsx";
+import Login from "./Login.jsx";
+import JoinCircle from "./JoinCircle.jsx";
+import type { Tier } from "../types.ts";
+
+type AuthProps = {
+  modalType: string;
+  circleName?: string;
+  circleId?: number;
+  userId?: string;
+  userTier?: Tier;
+  ucId?: number;
+  handleJoin?: (chosenTier: string, ucId: number) => void;
+  handleCancel?: () => void;
+  buttonText?: string;
+};
 
 const AuthModal = ({
   modalType,
@@ -14,43 +27,49 @@ const AuthModal = ({
   handleJoin,
   handleCancel,
   buttonText,
-}) => {
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [signUpOpen, setSignupOpen] = useState(false);
-  const [joinOpen, setJoinOpen] = useState(false);
+}: AuthProps) => {
+  const [loginOpen, setLoginOpen] = useState<boolean>(false);
+  const [signUpOpen, setSignupOpen] = useState<boolean>(false);
+  const [joinOpen, setJoinOpen] = useState<boolean>(false);
 
-  const toggleLoginDrawer = (inOpen) => (event) => {
-    if (
-      event?.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleLoginDrawer =
+    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event?.type === "keydown" &&
+        "key" in event &&
+        (event.key === "Tab" || event.key === "Shift")
+      ) {
+        return;
+      }
 
-    setLoginOpen(inOpen);
-  };
+      setLoginOpen(inOpen);
+    };
 
-  const toggleSignupDrawer = (inOpen) => (event) => {
-    if (
-      event?.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleSignupDrawer =
+    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event?.type === "keydown" &&
+        "key" in event &&
+        (event.key === "Tab" || event.key === "Shift")
+      ) {
+        return;
+      }
 
-    setSignupOpen(inOpen);
-  };
+      setSignupOpen(inOpen);
+    };
 
-  const toggleJoinDrawer = (inOpen) => (event) => {
-    if (
-      event?.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleJoinDrawer =
+    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event?.type === "keydown" &&
+        "key" in event &&
+        (event.key === "Tab" || event.key === "Shift")
+      ) {
+        return;
+      }
 
-    setJoinOpen(inOpen);
-  };
+      setJoinOpen(inOpen);
+    };
 
   const closeSignup = () => setSignupOpen(false);
   const closeLogin = () => setLoginOpen(false);
