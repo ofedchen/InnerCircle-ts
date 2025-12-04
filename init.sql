@@ -88,7 +88,7 @@ VALUES
 UPDATE circle 
 SET circle_slug = LOWER(REPLACE(circle_name, ' ', '-'));
 
-UPDATE circles
+UPDATE circle
 SET circle_avatar = '/images/athletes/' || circle_slug || '.webp'
 WHERE circle_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28);
 

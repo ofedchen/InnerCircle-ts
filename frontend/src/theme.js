@@ -15,7 +15,7 @@ const theme = extendTheme({
           dark: "var(--purple-dark)",
           darker: "var(--purple-darker)",
         },
-        secondary: {
+        neutral: {
           lighter: "var(--orange-lighter)",
           light: "var(--orange-light)",
           main: "var(--orange-main)",

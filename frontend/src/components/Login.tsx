@@ -10,7 +10,7 @@ import {
 } from "@mui/joy";
 import type { LoginForm } from "../types.ts";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser.ts";
+import { useUser } from "../hooks/useUser.js";
 
 type LoginProps = {
   modalType: string;
