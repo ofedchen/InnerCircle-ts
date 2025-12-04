@@ -1,23 +1,46 @@
 import { useState } from "react";
-import Button from "@mui/joy/Button";
-import Box from "@mui/joy/Box";
-import Divider from "@mui/joy/Divider";
-import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
-import DialogActions from "@mui/joy/DialogActions";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
+import {
+  Box,
+  Button,
+  Divider,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Modal,
+  ModalDialog,
+} from "@mui/joy";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import type { Membership, Tier } from "../types";
 
-function JoinCircle(props) {
-  const [chosenTier, setChosenTier] = useState(null);
-  const [open, setOpen] = useState(false);
+type JoinCircleProps = {
+  userId: string;
+  circleId: number;
+  ucId: number;
+  circleName: string;
+  handleMembership: (tier: string, ucId: number) => void;
+  cancelMembership: (cancelled: boolean) => void;
+  modalType: "manage" | "join";
+  userTier?: Tier;
+};
+
+function JoinCircle({
+  userId,
+  circleId,
+  circleName,
+  ucId,
+  cancelMembership,
+  handleMembership,
+  modalType,
+  userTier,
+}: JoinCircleProps) {
+  const [chosenTier, setChosenTier] = useState<Tier | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleJoin = async () => {
     if (chosenTier) {
-      const ucData = {
-        userId: props.userId,
-        circleId: props.circleId,
+      const ucData: Membership = {
+        userId: userId,
+        circleId: circleId,
         circleTier: chosenTier,
       };
       try {
@@ -34,7 +57,7 @@ function JoinCircle(props) {
         }
 
         const data = await response.json();
-        props.handleMembership(chosenTier, data.userCircle.uc_id);
+        handleMembership(chosenTier, data.userCircle.uc_id);
       } catch (error) {
         console.error("Error joining the circle: ", error);
       }
@@ -43,7 +66,7 @@ function JoinCircle(props) {
 
   const handleCancel = async () => {
     try {
-      const response = await fetch(`/api/user-circles/${props.ucId}`, {
+      const response = await fetch(`/api/user-circles/${ucId}`, {
         method: "DELETE",
       });
 
@@ -51,14 +74,14 @@ function JoinCircle(props) {
         throw new Error("Failed to cancel membership");
       }
 
-      props.cancelMembership(true);
+      cancelMembership(true);
       setOpen(false);
     } catch (error) {
       console.error("Error canceling membership:", error);
     }
   };
 
-  const tiers = [
+  const tiers: {value: Tier, label: Tier, price: string, color: string}[] = [
     {
       value: "Bronze",
       label: "Bronze",
@@ -74,7 +97,7 @@ function JoinCircle(props) {
     { value: "Gold", label: "Gold", price: "$14.99/month", color: "#FFD700" },
   ];
 
-  return props.modalType === "manage" ? (
+  return modalType === "manage" ? (
     <Box
       sx={{
         bgcolor: "var(--purple-dark)",
@@ -88,7 +111,7 @@ function JoinCircle(props) {
       }}
     >
       <h2 style={{ fontSize: "1.5rem", textAlign: "center" }}>
-        You are a member of {props.circleName}'s circle
+        You are a member of {circleName}'s circle
       </h2>
       <p
         style={{
@@ -100,7 +123,7 @@ function JoinCircle(props) {
       >
         Current tier:{" "}
         <span style={{ fontWeight: "bold", textTransform: "capitalize" }}>
-          {props.userTier}
+          {userTier}
         </span>
       </p>
       <Button
@@ -120,7 +143,7 @@ function JoinCircle(props) {
           </DialogTitle>
           <Divider />
           <DialogContent>
-            Are you sure you want to leave {props.circleName}'s circle?
+            Are you sure you want to leave {circleName}'s circle?
           </DialogContent>
           <DialogActions>
             <Button variant="solid" color="danger" onClick={handleCancel}>
@@ -148,7 +171,7 @@ function JoinCircle(props) {
       }}
     >
       <h2 style={{ fontSize: "1.5rem", textAlign: "center" }}>
-        Joining {props.circleName}'s circle
+        Joining {circleName}'s circle
       </h2>
       <p
         style={{
@@ -235,7 +258,7 @@ function JoinCircle(props) {
       </Box>
       <Button
         type="submit"
-        color="secondary"
+        color="neutral"
         variant="solid"
         onClick={handleJoin}
         disabled={!chosenTier}

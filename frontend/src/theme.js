@@ -15,7 +15,7 @@ const theme = extendTheme({
           dark: "var(--purple-dark)",
           darker: "var(--purple-darker)",
         },
-        secondary: {
+        neutral: {
           lighter: "var(--orange-lighter)",
           light: "var(--orange-light)",
           main: "var(--orange-main)",
@@ -63,7 +63,7 @@ const theme = extendTheme({
               },
             }),
             // Secondary solid
-            ...(!ownerState.disabled && ownerState.color === 'secondary' && {
+            ...(!ownerState.disabled && ownerState.color === 'neutral' && {
               color: 'var(--purple-main)',
               backgroundColor: theme.vars.palette.secondary.main,
               '&:hover': {
@@ -89,7 +89,7 @@ const theme = extendTheme({
               },
             }),
             // Secondary outlined
-            ...(!ownerState.disabled && ownerState.color === 'secondary' && {
+            ...(!ownerState.disabled && ownerState.color === 'neutral' && {
               borderColor: theme.vars.palette.secondary.main,
               color: theme.vars.palette.secondary.main,
               '&:hover': {
@@ -127,7 +127,7 @@ const theme = extendTheme({
               },
             }),
             // Secondary outlined
-            ...(ownerState.color === 'secondary' && {
+            ...(ownerState.color === 'neutral' && {
               borderColor: theme.vars.palette.secondary.main,
               color: theme.vars.palette.secondary.main,
               '&:hover': {

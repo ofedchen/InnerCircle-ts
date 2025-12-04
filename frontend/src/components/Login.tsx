@@ -1,22 +1,26 @@
 import { useState } from "react";
-import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
+import { Box, Button, FormControl, FormLabel, Input, Stack } from "@mui/joy";
+import type { LoginForm } from "../types.ts";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import type { ModalType } from "../types.ts";
 
-const Login = (props) => {
+type LoginProps = {
+  modalType: ModalType;
+  toggleClose: () => void;
+  toggleSignup: () => void;
+  toggleJoin: () => void;
+};
+
+const Login = (props: LoginProps) => {
   const { login } = useUser();
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [_pwdFocus, setPwdFocus] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [pwd, setPwd] = useState<string>("");
+  const [_pwdFocus, setPwdFocus] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  async function handleLogin(formData) {
+  async function handleLogin(formData: LoginForm) {
     try {
       const response = await fetch("/api/login/", {
         method: "POST",
@@ -60,7 +64,7 @@ const Login = (props) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
+          const formJson = Object.fromEntries(formData.entries()) as LoginForm;
           handleLogin(formJson);
         }}
       >
@@ -96,7 +100,7 @@ const Login = (props) => {
           <Box sx={{ height: 8 }} />
           <Button
             type="submit"
-            color="secondary"
+            color="neutral"
             variant="solid"
             disabled={!email || !pwd}
             sx={{ py: 1.2 }}
