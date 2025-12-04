@@ -278,7 +278,7 @@ export default function Profile() {
                 <div className="flex justify-center m-4">
                   <Button
                     onClick={handleSaveChanges}
-                    color="secondary"
+                    color="neutral"
                     variant="outlined"
                   >
                     Save Changes
@@ -317,7 +317,7 @@ export default function Profile() {
                   {" "}
                   You don't have any circles yet.
                 </p>
-                <Button variant="solid" color="secondary">
+                <Button variant="solid" color="neutral">
                   <Link to="/categories">EXPLORE CIRCLES</Link>
                 </Button>
               </div>

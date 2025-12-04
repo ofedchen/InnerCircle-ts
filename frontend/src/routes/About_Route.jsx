@@ -20,7 +20,7 @@ export default function About() {
 						helping them continue doing what they love while getting closer to
 						their inner circle.
 					</p>
-					<Button variant="solid" color="secondary">
+					<Button variant="solid" color="neutral">
 						<Link to="/categories">EXPLORE CIRCLES</Link>
 					</Button>
 				</section>

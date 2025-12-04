@@ -35,12 +35,16 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
-  "include": ["frontend/src", "backend"],
+  "include": ["frontend"],
   "exclude": ["node_modules", "dist", "uploads"]
 }

@@ -1,3 +1,9 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
-export const UserContext = createContext();
+type UserContextType = {
+	userId: string;
+	login: (uuid: string) => void;
+	logout: () => void;
+};
+
+export const UserContext = createContext<UserContextType | null>(null);

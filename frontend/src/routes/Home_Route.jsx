@@ -24,7 +24,7 @@ export default function Home() {
 					</h1>
 				</div>
 				<div className="flex bg-(--purple-lighter) w-full justify-around gap-2 px-8 py-8">
-					<Button variant="solid" color="secondary">
+					<Button variant="solid" color="neutral">
 						<Link to="/categories">EXPLORE CIRCLES</Link>
 					</Button>
 					{!userId && <AuthModal modalType={"signup"} />}

@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
-import { UserContext } from './UserContext.js';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { UserContext } from "./UserContext.ts";
 
-export const UserProvider = ({ children }) => {
-  const [userId, setUserId] = useState("");
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const uuid = localStorage.getItem("userId");
@@ -10,7 +13,7 @@ export const UserProvider = ({ children }) => {
     setUserId(uuid || "");
   }, []);
 
-  const login = (uuid) => {
+  const login = (uuid: string) => {
     localStorage.setItem("userId", uuid);
     setUserId(uuid);
     console.log("User logged in:", uuid);
