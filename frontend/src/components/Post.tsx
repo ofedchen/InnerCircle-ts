@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
+import type { Tier } from "../types";
 
 type PostProps = {
 	slug: string;
@@ -8,7 +9,7 @@ type PostProps = {
 	video?: string;
 	postimg?: string;
 	text: string;
-	tier: string;
+	tier: Tier;
 	imgsrc?: string;
 	blurred?: string;
 };
