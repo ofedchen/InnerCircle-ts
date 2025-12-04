@@ -96,7 +96,7 @@ const Login = (props) => {
           <Box sx={{ height: 8 }} />
           <Button
             type="submit"
-            color="secondary"
+            color="neutral"
             variant="solid"
             disabled={!email || !pwd}
             sx={{ py: 1.2 }}

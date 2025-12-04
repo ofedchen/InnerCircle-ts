@@ -43,7 +43,7 @@ export default function Feed() {
               You aren't in a circle yet. Enter now?
             </h2>
             <Link to="/categories">
-              <Button variant="solid" color="secondary">
+              <Button variant="solid" color="neutral">
                 Explore the circles
               </Button>
             </Link>

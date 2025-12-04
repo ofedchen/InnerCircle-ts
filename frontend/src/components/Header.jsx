@@ -85,7 +85,7 @@ export default function Header() {
                   <Button
                     onClick={Logout}
                     variant="outlined"
-                    color="secondary"
+                    color="neutral"
                     sx={{ mt: 20 }}
                   >
                     LOG OUT

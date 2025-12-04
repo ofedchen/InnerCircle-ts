@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Drawer } from "@mui/joy";
-import Signup from "./Signup.jsx";
+import Signup from "./Signup.tsx";
 import Login from "./Login.jsx";
 import JoinCircle from "./JoinCircle.jsx";
 import type { Tier } from "../types.ts";
@@ -113,7 +113,7 @@ const AuthModal = ({
         <Button
           onClick={userId ? toggleJoinDrawer(true) : toggleSignupDrawer(true)}
           variant="solid"
-          color="secondary"
+          color="neutral"
         >
           {buttonText ? buttonText : "STEP INSIDE"}
         </Button>

@@ -1,35 +1,43 @@
 import { useEffect, useState } from "react";
-import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import FormHelperText from "@mui/joy/FormHelperText";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  Input,
+  Stack,
+} from "@mui/joy";
+import type { SignUpForm } from "../types.ts";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
 
-const Signup = (props) => {
-  const [userName, setUserName] = useState("");
-  const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
+type SignUpProps = {
+  toggleClose: () => void;
+  toggleLogin: () => void;
+};
 
-  const [email, setEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
+const Signup = (props: SignUpProps) => {
+  const [userName, setUserName] = useState<string>("");
+  const [validName, setValidName] = useState<boolean>(false);
+  const [userFocus, setUserFocus] = useState<boolean>(false);
+
+  const [email, setEmail] = useState<string>("");
+  const [validEmail, setValidEmail] = useState<boolean>(false);
+  const [emailFocus, setEmailFocus] = useState<boolean>(false);
 
   const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
+  const [validPwd, setValidPwd] = useState<boolean>(false);
+  const [pwdFocus, setPwdFocus] = useState<boolean>(false);
 
-  const [matchPwd, setMatchPwd] = useState("");
-  const [validMatch, setValidMatch] = useState(false);
-  const [_matchFocus, setMatchFocus] = useState(false);
+  const [matchPwd, setMatchPwd] = useState<string>("");
+  const [validMatch, setValidMatch] = useState<boolean>(false);
+  const [_matchFocus, setMatchFocus] = useState<boolean>(false);
 
-  const [showPassword, setShowPassword] = useState(true);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(true);
+  const [agreedToTerms, setAgreedToTerms] = useState<boolean>(false);
 
   const checkboxLabel = (
     <span>
@@ -73,7 +81,7 @@ const Signup = (props) => {
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
-  async function signUp(formData) {
+  async function signUp(formData: SignUpForm) {
     try {
       const response = await fetch("/api/signup/", {
         method: "POST",
@@ -135,12 +143,12 @@ const Signup = (props) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
+          const formJson = Object.fromEntries(formData.entries()) as SignUpForm;
           signUp(formJson);
         }}
       >
         <Stack spacing={1}>
-          <FormControl error={!validName && userName && !userFocus}>
+          <FormControl error={!validName && !!userName && !userFocus}>
             <FormLabel>Name</FormLabel>
             <Input
               name="userName"
@@ -157,7 +165,7 @@ const Signup = (props) => {
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl error={!validEmail && email && !emailFocus}>
+          <FormControl error={!validEmail && !!email && !emailFocus}>
             <FormLabel>Email</FormLabel>
             <Input
               name="email"
@@ -174,7 +182,7 @@ const Signup = (props) => {
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl error={!validPwd && pwd && !pwdFocus}>
+          <FormControl error={!validPwd && !!pwd && !pwdFocus}>
             <FormLabel>Password</FormLabel>
             <Input
               name="password"
@@ -197,7 +205,7 @@ const Signup = (props) => {
                 : "8-24 characters with uppercase, lowercase, number, and special character (!@#$%()&)"}
             </FormHelperText>
           </FormControl>
-          <FormControl error={!validMatch && matchPwd}>
+          <FormControl error={!validMatch && !!matchPwd}>
             <FormLabel>Repeat password</FormLabel>
             <Input
               onChange={(e) => setMatchPwd(e.target.value)}
@@ -227,7 +235,7 @@ const Signup = (props) => {
           <Box sx={{ height: 8 }} />
           <Button
             type="submit"
-            color="secondary"
+            color="neutral"
             variant="solid"
             disabled={
               !validMatch ||

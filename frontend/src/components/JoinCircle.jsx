@@ -235,7 +235,7 @@ function JoinCircle(props) {
       </Box>
       <Button
         type="submit"
-        color="secondary"
+        color="neutral"
         variant="solid"
         onClick={handleJoin}
         disabled={!chosenTier}
