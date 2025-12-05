@@ -103,8 +103,8 @@ export default function PrivacyPolicy() {
               <strong>Active account:</strong> Until you delete it
             </li>
             <li>
-              <strong>Deleted account:</strong> Permanently
-              removed from the moment you delete it
+              <strong>Deleted account:</strong> Permanently removed from the
+              moment you delete it
             </li>
           </ul>
         </section>

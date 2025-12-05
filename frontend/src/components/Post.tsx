@@ -7,7 +7,7 @@ type PostProps = {
 	circleId: number;
 	title?: string;
 	video?: string;
-	postimg?: string;
+	postImg?: string;
 	text: string;
 	tier: Tier;
 	imgsrc?: string;
@@ -19,14 +19,14 @@ export default function Post({
 	circleId,
 	title,
 	video,
-	postimg,
+	postImg,
 	text,
 	tier,
 	imgsrc,
 	blurred,
 }: PostProps) {
 	let textWrap = "";
-	if (!video && !postimg) {
+	if (!video && !postImg) {
 		textWrap = "mt-8";
 	}
 
@@ -67,7 +67,7 @@ export default function Post({
 						allowFullScreen
 					></iframe>
 				) : (
-					<img src={postimg} />
+					<img src={postImg} />
 				)}
 			</div>
 			<h3

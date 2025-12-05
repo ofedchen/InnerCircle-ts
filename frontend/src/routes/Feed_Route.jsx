@@ -58,7 +58,7 @@ export default function Feed() {
             let blurred = false;
             if (p.post_content) {
               if (p.post_content.includes("image")) {
-                mediaProps.postimg = p.post_content;
+                mediaProps.postImg = p.post_content;
               } else {
                 mediaProps.video = p.post_content;
               }

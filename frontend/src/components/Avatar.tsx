@@ -5,7 +5,7 @@ type AvatarProps = {
 	src: string;
 	name: string;
 	className?: string;
-	tierColor: Tier;
+	tierColor: Tier | null;
 	variant?: string;
 };
 
