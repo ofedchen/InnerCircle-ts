@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { UserContext } from "./UserContext.ts";
+import { UserContext } from "./UserContext";
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
