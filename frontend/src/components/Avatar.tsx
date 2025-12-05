@@ -4,14 +4,16 @@ import type { Tier } from "../types.ts";
 type AvatarProps = {
 	src: string;
 	name: string;
+	alt?: string;
 	className?: string;
-	tierColor: Tier;
+	tierColor?: Tier;
 	variant?: string;
 };
 
 export default function Avatar({
 	src,
 	name,
+	alt,
 	tierColor,
 	variant,
 	className,
