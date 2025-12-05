@@ -1,16 +1,16 @@
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Home from "./routes/Home_Route";
 import About from "./routes/About_Route";
-import Faq from "./routes/FAQ_Route.jsx";
+import Faq from "./routes/FAQ_Route";
 import Profile from "./routes/Profile_Route";
 import Categories from "./routes/Categories_Route";
 import Feed from "./routes/Feed_Route";
-import CirclePage from "./routes/Circle_Route.jsx";
-import PrivacyPolicy from "./routes/PrivacyPolicy.jsx";
-import Terms from "./routes/Terms.jsx";
-import Category from "./routes/Category_Route.jsx";
+import CirclePage from "./routes/Circle_Route";
+import PrivacyPolicy from "./routes/PrivacyPolicy";
+import Terms from "./routes/Terms";
+import Category from "./routes/Category_Route";
 import "./App.css";
 
 function App() {
