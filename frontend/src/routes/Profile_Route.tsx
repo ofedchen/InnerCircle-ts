@@ -9,7 +9,6 @@ import {
 } from "@mui/joy";
 import Avatar from "../components/Avatar";
 import { useUser } from "../hooks/useUser";
-
 import { useState } from "react";
 import { useEffect } from "react";
 import Divider from "@mui/joy/Divider";
@@ -20,14 +19,16 @@ import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 
+import { UserData, ProfileUpdatesProps } from "../types";
+
 export default function Profile() {
 	const { userId, logout } = useUser();
 
-	const [userData, setUserData] = useState(null);
-	const [newUsername, setNewUsername] = useState("");
-	const [newUserEmail, setNewUserEmail] = useState("");
-	const [newPaymentMethod, setNewPaymentMethod] = useState("");
-	const [hasChanges, setHasChanges] = useState(false);
+	const [userData, setUserData] = useState<UserData | null>(null);
+	const [newUsername, setNewUsername] = useState<string>("");
+	const [newUserEmail, setNewUserEmail] = useState<string>("");
+	const [newPaymentMethod, setNewPaymentMethod] = useState<string>("");
+	const [hasChanges, setHasChanges] = useState<boolean>(false);
 	const [open, setOpen] = useState(false);
 
 	const [myCircles, setMyCircles] = useState(null);
@@ -63,14 +64,8 @@ export default function Profile() {
 		setHasChanges(usernameChanged || emailChanged || paymentChanged);
 	}, [newUsername, newUserEmail, newPaymentMethod, userData]);
 
-	type updatesProps = {
-		userName?: string;
-		userEmail?: string;
-		userPayment?: string;
-	};
-
 	async function handleSaveChanges() {
-		const updates: updatesProps = {};
+		const updates: ProfileUpdatesProps = {};
 
 		if (newUsername !== userData.users_name) {
 			updates.userName = newUsername;
