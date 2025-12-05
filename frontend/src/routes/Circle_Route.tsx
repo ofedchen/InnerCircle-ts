@@ -4,23 +4,24 @@ import { useUser } from "../hooks/useUser";
 import Avatar from "../components/Avatar";
 import Post from "../components/Post";
 import AuthModal from "../components/AuthModal";
+import type { CircleDetails, PostMediaProps, PostType, Tier } from "../types";
 
 export default function CirclePage() {
   const { circleId, circleSlug } = useParams();
-  const [circleName, setCircleName] = useState("");
-  const [circleAvatar, setCircleAvatar] = useState(null);
-  const [circleBio, setCircleBio] = useState("");
-  const [circleMembers, setCircleMembers] = useState("");
-  const [circlePosts, setCirclePosts] = useState([]);
-  const [userCircleId, setUserCircleId] = useState(null);
-  const [isMember, setIsMember] = useState(false);
-  const [userTier, setUserTier] = useState(null);
+  const [circleName, setCircleName] = useState<string>("");
+  const [circleAvatar, setCircleAvatar] = useState<string | null>(null);
+  const [circleBio, setCircleBio] = useState<string>("");
+  const [circleMembers, setCircleMembers] = useState<string>("");
+  const [circlePosts, setCirclePosts] = useState<PostType[]>([]);
+  const [userCircleId, setUserCircleId] = useState<number | null>(null);
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [userTier, setUserTier] = useState<Tier | null>(null);
   const { userId } = useUser();
 
   useEffect(() => {
     fetch(`/api/circles/${circleId}`)
       .then((response) => response.json())
-      .then((result) => {
+      .then((result: CircleDetails[]) => {
         setCircleName(result[0].circle_name);
         setCircleAvatar(result[0].circle_avatar);
         setCircleBio(result[0].circle_bio);
@@ -31,40 +32,48 @@ export default function CirclePage() {
   useEffect(() => {
     fetch(`/api/circles/${circleId}/fans`)
       .then((response) => response.json())
-      .then((result) => {
-        const circleMember = result.find(({ uc_user_id }) => {
-          return uc_user_id === userId;
-        });
-        if (circleMember) {
-          setIsMember(true);
-          setUserTier(circleMember.uc_circle_tier);
-          setUserCircleId(circleMember.uc_id);
+      .then(
+        (
+          result: {
+            uc_id: number;
+            uc_circle_tier: Tier;
+            uc_user_id: string;
+          }[]
+        ) => {
+          const circleMember = result.find(({ uc_user_id }) => {
+            return uc_user_id === userId;
+          });
+          if (circleMember) {
+            setIsMember(true);
+            setUserTier(circleMember.uc_circle_tier);
+            setUserCircleId(circleMember.uc_id);
+          }
         }
-      });
+      );
   }, [circleId, userId]);
 
   useEffect(() => {
     fetch(`/api/posts/all/${circleId}`)
       .then((response) => response.json())
-      .then((result) => {
+      .then((result: PostType[]) => {
         console.log(result);
         setCirclePosts(result);
       });
   }, [circleId]);
 
-  const handleMembership = (chosenTier, ucId) => {
+  const handleMembership = (chosenTier: Tier, ucId: number): void => {
     setIsMember(true);
     setUserTier(chosenTier);
     setUserCircleId(ucId);
   };
 
-  const cancelMembership = () => {
+  const cancelMembership = (): void => {
     setIsMember(false);
     setUserTier(null);
     setUserCircleId(null);
   };
 
-  const shouldBlur = (postTier, userTier) => {
+  const shouldBlur = (postTier: Tier, userTier: Tier | null): boolean => {
     if (!userTier) return true;
     const tierHierarchy = { Bronze: 1, Silver: 2, Gold: 3 };
     return tierHierarchy[userTier] < tierHierarchy[postTier];
@@ -73,7 +82,12 @@ export default function CirclePage() {
   return (
     <article className="wrapper-dark py-2">
       <section className="px-6 py-8 font-kanit flex flex-col items-center">
-        <Avatar src={circleAvatar} variant="large" />
+        <Avatar
+          src={circleAvatar}
+          variant="large"
+          name={circleName}
+          tierColor={userTier ? userTier : null}
+        />
         <h1 className="text-3xl text-center text-(--orange-main) py-6">
           {circleName}
         </h1>
@@ -89,7 +103,7 @@ export default function CirclePage() {
             </h2>
             <AuthModal
               circleName={circleName}
-              circleId={circleId}
+              circleId={Number(circleId)}
               modalType="join"
               handleJoin={handleMembership}
               userId={userId}
@@ -120,16 +134,16 @@ export default function CirclePage() {
         </h2>
         {circlePosts &&
           circlePosts.map((p) => {
-            const mediaProps = {};
+            const mediaProps: PostMediaProps = {};
             if (p.post_content) {
               if (p.post_content.includes("image")) {
-                mediaProps.postimg = p.post_content;
+                mediaProps.postImg = p.post_content;
               } else {
                 mediaProps.video = p.post_content;
               }
             }
 
-            let blurred = shouldBlur(p.post_tier, userTier);
+            const blurred: boolean = shouldBlur(p.post_tier, userTier);
 
             return (
               <section
@@ -141,15 +155,15 @@ export default function CirclePage() {
                   text={p.post_text}
                   tier={p.post_tier}
                   imgsrc={circleAvatar}
-                  blur={blurred}
+                  blurred={blurred}
                   {...mediaProps}
                   slug={circleSlug}
-                  circleId={circleId}
+                  circleId={Number(circleId)}
                 />
                 {!isMember && (
                   <AuthModal
                     circleName={circleName}
-                    circleId={circleId}
+                    circleId={Number(circleId)}
                     modalType="join"
                     handleJoin={handleMembership}
                     userId={userId}
