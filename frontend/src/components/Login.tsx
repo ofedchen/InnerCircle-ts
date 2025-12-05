@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Box, Button, FormControl, FormLabel, Input, Stack } from "@mui/joy";
-import type { LoginForm } from "../types.ts";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
-import type { ModalType } from "../types.ts";
+import type { AuthFormData, ModalType } from "../types.ts";
 
 type LoginProps = {
   modalType: ModalType;
@@ -20,7 +19,7 @@ const Login = (props: LoginProps) => {
 
   const navigate = useNavigate();
 
-  async function handleLogin(formData: LoginForm) {
+  async function handleLogin(formData: AuthFormData) {
     try {
       const response = await fetch("/api/login/", {
         method: "POST",
@@ -64,7 +63,7 @@ const Login = (props: LoginProps) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries()) as LoginForm;
+          const formJson = Object.fromEntries(formData.entries()) as AuthFormData;
           handleLogin(formJson);
         }}
       >

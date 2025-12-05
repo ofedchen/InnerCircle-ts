@@ -6,13 +6,17 @@ export type Membership = {
   circleTier: Tier;
 };
 
-export type LoginForm = {
+type LoginForm = {
   email: string;
   password: string;
 };
 
-export type SignUpForm = {
+type SignUpForm = {
   userName: string;
-} & LoginForm;
+  email: string;
+  password: string;
+};
+
+export type AuthFormData = LoginForm | SignUpForm;
 
 export type ModalType = "login" | "signup" | "join" | "manage";

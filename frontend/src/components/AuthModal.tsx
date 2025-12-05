@@ -7,6 +7,10 @@ import type { ModalType, Tier } from "../types.ts";
 
 type AuthProps = {
   modalType: ModalType;
+  buttonText?: string;
+};
+
+type MembershipProps = {
   circleName?: string;
   circleId?: number;
   userId?: string;
@@ -14,7 +18,6 @@ type AuthProps = {
   ucId?: number;
   handleJoin?: (chosenTier: string, ucId: number) => void;
   handleCancel?: () => void;
-  buttonText?: string;
 };
 
 const AuthModal = ({
@@ -27,10 +30,19 @@ const AuthModal = ({
   handleJoin,
   handleCancel,
   buttonText,
-}: AuthProps) => {
+}: AuthProps & MembershipProps) => {
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
   const [signUpOpen, setSignupOpen] = useState<boolean>(false);
   const [joinOpen, setJoinOpen] = useState<boolean>(false);
+
+  const hasMembershipProps =
+    circleName &&
+    circleId &&
+    userId &&
+    userTier !== undefined &&
+    ucId !== undefined &&
+    handleJoin &&
+    handleCancel;
 
   const toggleLoginDrawer =
     (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -150,13 +162,7 @@ const AuthModal = ({
           <Signup toggleClose={closeSignup} toggleLogin={switchToLogin} />
         </Drawer>
         {(modalType === "join" || modalType === "manage") &&
-          circleName &&
-          circleId &&
-          userId &&
-          userTier &&
-          ucId &&
-          handleJoin &&
-          handleCancel && (
+          hasMembershipProps && (
             <Drawer
               anchor="bottom"
               onClose={toggleJoinDrawer(false)}
