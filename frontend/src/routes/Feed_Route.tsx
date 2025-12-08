@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/joy";
 import Post from "../components/Post";
 import { useUser } from "../hooks/useUser";
+import { PostMediaProps, CircleDetails, FeedPost } from "../types";
 
 export default function Feed() {
-	const [circles, setCircles] = useState([]);
-	const [isMember, setIsMember] = useState(false);
+	const [feedPost, setCircles] = useState<FeedPost[]>([]);
+	const [isMember, setIsMember] = useState<boolean>(false);
 	const { userId } = useUser();
+
+	const isLoggedIn: boolean = !!userId;
 
 	useEffect(() => {
 		if (userId) {
@@ -22,6 +25,7 @@ export default function Feed() {
 							.then((response) => response.json())
 							.then((result) => {
 								setCircles(result);
+								setIsMember(false);
 							});
 					}
 				});
@@ -33,11 +37,6 @@ export default function Feed() {
 				});
 		}
 	}, []);
-
-	type PostmediaProps = {
-		postimg?: string;
-		video?: string;
-	};
 
 	return (
 		<>
@@ -57,32 +56,33 @@ export default function Feed() {
 				<h1 className="text-3xl text-center font-black font-kanit py-8">
 					WHO'S UP TO WHAT?
 				</h1>
+
 				<div className="flex flex-col items-center bg-(--purple-dark) text-(--orange-main) px-4 py-10">
-					{circles.slice(0, 10).map((p) => {
-						const mediaProps: mediaProps = {};
-						let isBlurred = false;
+					{feedPost.slice(0, 10).map((p: FeedPost) => {
+						const mediaProps: PostMediaProps = {};
 						if (p.post_content) {
 							if (p.post_content.includes("image")) {
-								mediaProps.postimg = p.post_content;
+								mediaProps.postImg = p.post_content;
 							} else {
 								mediaProps.video = p.post_content;
 							}
 						}
-
-						if (!isMember || !userId) isBlurred = true;
+						const shouldBlur = !isLoggedIn || !isMember;
 
 						return (
-							<Post
-								key={p.post_id}
-								title={p.post_title}
-								text={p.post_text}
-								tier={p.post_tier}
-								imgsrc={p.circle_avatar}
-								{...mediaProps}
-								blurred={""}
-								slug={p.circle_slug}
-								circleId={p.circle_id}
-							/>
+							<>
+								<Post
+									key={p.post_id}
+									title={p.post_title}
+									text={p.post_text}
+									tier={p.post_tier}
+									avatar={p.circle_avatar}
+									{...mediaProps}
+									blurred={shouldBlur}
+									slug={p.circle_slug}
+									circleId={p.circle_id}
+								/>
+							</>
 						);
 					})}
 				</div>

@@ -65,7 +65,7 @@ export default function Profile() {
 	}, [newUsername, newUserEmail, newPaymentMethod, userData]);
 
 	async function handleSaveChanges() {
-		const updates: ProfileUpdatesProps = {};
+		let updates: ProfileUpdatesProps;
 
 		if (newUsername !== userData.users_name) {
 			updates.userName = newUsername;
@@ -130,7 +130,7 @@ export default function Profile() {
 					id="profile-hero"
 					className="flex flex-col self-start items-center justify-around text-2xl font-black w-full bg-(--purple-main) text-(--orange-lighter)  text-center"
 				>
-					<h2> Welcome Back {userData?.users_name}!</h2>
+					<h2> Welcome back {userData?.users_name}!</h2>
 					<div className="flex items-end">
 						<img className="h-40 w-40" src="/avatar1.webp" />
 						{/* removed change avatar functionality for now		<svg

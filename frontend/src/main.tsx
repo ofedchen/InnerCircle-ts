@@ -4,8 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { CssVarsProvider } from "@mui/joy/styles";
 import theme from "./theme.js";
 import "./index.css";
-import App from "./App.jsx";
-import { UserProvider } from "./contexts/UserProvider.jsx";
+import App from "./App";
+import { UserProvider } from "./contexts/UserProvider";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -9,7 +9,7 @@ import {
   Input,
   Stack,
 } from "@mui/joy";
-import type { SignUpForm } from "../types.ts";
+import type { AuthFormData } from "../types.ts";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
@@ -81,7 +81,7 @@ const Signup = (props: SignUpProps) => {
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
-  async function signUp(formData: SignUpForm) {
+  async function signUp(formData: AuthFormData) {
     try {
       const response = await fetch("/api/signup/", {
         method: "POST",
@@ -143,7 +143,7 @@ const Signup = (props: SignUpProps) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries()) as SignUpForm;
+          const formJson = Object.fromEntries(formData.entries()) as AuthFormData;
           signUp(formJson);
         }}
       >

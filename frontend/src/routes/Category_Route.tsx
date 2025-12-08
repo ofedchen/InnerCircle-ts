@@ -40,6 +40,7 @@ export default function Category() {
 											name={athlete.circle_name}
 											alt={athlete.circle_name}
 											variant="large"
+											tierColor={null}
 										/>
 										<h2 className="  font-bold font-kanit text-(--orange-main) text-2xl z-10 drop-shadow-[1px_5px_4px_var(--purple-dark)]">
 											{athlete.circle_name}
