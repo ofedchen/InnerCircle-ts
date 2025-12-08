@@ -1,5 +1,13 @@
 import React from "react";
-import type { AvatarProps, Tier } from "../types.ts";
+import type { Tier } from "../types.ts";
+
+type AvatarProps = {
+	src: string;
+	name: string;
+	className?: string;
+	tierColor: Tier | null;
+	variant?: string;
+};
 
 export default function Avatar({
 	src,

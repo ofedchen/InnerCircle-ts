@@ -45,8 +45,6 @@ export type Membership = {
 	circleTier: Tier;
 };
 
-export type PostDetails = PostType & CircleDetails;
-
 export type PostMediaProps = {
 	postImg?: string;
 	video?: string;
