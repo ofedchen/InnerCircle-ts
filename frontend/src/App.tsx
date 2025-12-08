@@ -14,30 +14,30 @@ import Category from "./routes/Category_Route";
 import "./App.css";
 
 function App() {
-  return (
-    <div>
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<div>404 Not Found</div>} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/categories/:categoryName" element={<Category />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route
-            path="/circle/:circleId/:circleSlug"
-            element={<CirclePage />}
-          />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<Terms />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-  );
+	return (
+		<div>
+			<Header />
+			<main>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="*" element={<div>404 Not Found</div>} />
+					<Route path="/feed" element={<Feed />} />
+					<Route path="/profile" element={<Profile />} />
+					<Route path="/categories" element={<Categories />} />
+					<Route path="/categories/:categoryName" element={<Category />} />
+					<Route path="/about" element={<About />} />
+					<Route path="/faq" element={<Faq />} />
+					<Route
+						path="/circle/:circleId/:circleSlug"
+						element={<CirclePage />}
+					/>
+					<Route path="/privacy" element={<PrivacyPolicy />} />
+					<Route path="/terms" element={<Terms />} />
+				</Routes>
+			</main>
+			<Footer />
+		</div>
+	);
 }
 
 export default App;

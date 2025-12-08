@@ -10,8 +10,8 @@ type PostProps = {
 	postImg?: string;
 	text: string;
 	tier: Tier;
-	imgsrc?: string;
-	blurred?: string;
+	avatar?: string;
+	blurred: boolean;
 };
 
 export default function Post({
@@ -22,7 +22,7 @@ export default function Post({
 	postImg,
 	text,
 	tier,
-	imgsrc,
+	avatar,
 	blurred,
 }: PostProps) {
 	let textWrap = "";
@@ -31,7 +31,7 @@ export default function Post({
 	}
 
 	let lockedPost: string;
-	if (blurred) {
+	if (blurred === true) {
 		lockedPost = "blur-sm";
 	}
 
@@ -45,10 +45,10 @@ export default function Post({
 				className="self-start ml-[-14px] mt-[-14px] relative z-50"
 			>
 				<Avatar
-					name={""}
-					tierColor={tier}
-					src={imgsrc}
-					// className="self-start ml-[-14px] mt-[-14px] relative z-50"
+					tierColor={blurred ? null : tier}
+					src={avatar}
+					variant="small"
+					className="self-start ml-[-2px] mt-[-6px] relative z-50"
 				/>
 			</Link>
 
