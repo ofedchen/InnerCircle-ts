@@ -12,6 +12,7 @@ type AvatarProps = {
 export default function Avatar({
 	src,
 	name,
+	alt,
 	tierColor,
 	variant,
 	className,
@@ -22,12 +23,13 @@ export default function Avatar({
 		Bronze: "#CD7F32",
 	} as const;
 
-	const borderColor = colorMap[tierColor] || "transparent";
-	const textColor = colorMap[tierColor] || "transparent";
+	const borderColor = tierColor ? colorMap[tierColor] : "transparent";
+	const textColor = name && tierColor ? colorMap[tierColor] : "transparent";
 
-	const avatarSize = variant
-		? "w-40 h-40 sm:w-30 sm:h-30 md:w-62 md:h-62"
-		: "w-18 h-18 sm:w-16 sm:h-16 md:w-24 md:h-24";
+	const avatarSize =
+		variant === "large"
+			? "w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48"
+			: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24";
 
 	return (
 		<>
@@ -37,7 +39,7 @@ export default function Avatar({
 			>
 				<img
 					src={src}
-					alt={name}
+					alt={alt}
 					loading="lazy"
 					className={`rounded-full object-cover border-4 border-(--avatar-border) shadow-[4px_4px_8px_-3px_var(--orange-dark)] ${avatarSize}`}
 				/>
