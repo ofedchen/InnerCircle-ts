@@ -3,11 +3,6 @@ import * as db from "../db/index.js";
 
 const router = Router();
 
-type PostParams = {
-	post_id: number;
-	circle_id: number;
-};
-
 router.get("/", async (req: Request, res: Response) => {
 	const query = `
     SELECT

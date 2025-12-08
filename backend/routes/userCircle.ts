@@ -1,9 +1,9 @@
-import express from "express";
+import { Router, Request, Response } from "express";
 import * as db from "../db/index.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/:users_id", async (req, res, next) => {
+router.get("/:users_id", async (req: Request, res: Response) => {
 	const query = `
   SELECT 
   uc.uc_id, 
@@ -20,16 +20,16 @@ router.get("/:users_id", async (req, res, next) => {
 	try {
 		const result = await db.query(query, [req.params.users_id]);
 		res.send(result.rows);
-	} catch (err) {
+	} catch (err: unknown) {
 		console.log("Error fetching user circles", err);
 		res.status(500).json({
 			error: "Failed to fetch user circles",
-			message: err.message,
+			message: (err as Error).message,
 		});
 	}
 });
 
-router.get("/feed/:users_id", async (req, res, next) => {
+router.get("/feed/:users_id", async (req: Request, res: Response) => {
 	const query = `
     SELECT
       p.post_id,
@@ -62,16 +62,16 @@ router.get("/feed/:users_id", async (req, res, next) => {
 	try {
 		const result = await db.query(query, [req.params.users_id]);
 		res.send(result.rows);
-	} catch (err) {
+	} catch (err: unknown) {
 		console.log("Error fetching feed posts", err);
 		res.status(500).json({
 			error: "Failed to fetch feed posts",
-			message: err.message,
+			message: (err as Error).message,
 		});
 	}
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req: Request, res: Response) => {
 	const { userId, circleId, circleTier } = req.body;
 
 	if (!circleTier) {
@@ -98,19 +98,19 @@ router.post("/", async (req, res) => {
 			message: "new userCircle created successfully",
 			userCircle: result.rows[0],
 		});
-	} catch (err) {
+	} catch (err: unknown) {
 		console.error("Error creating userCircle: ", err);
 		res.status(500).json({ error: "Failed to create a userCircle" });
 	}
 });
 
-router.delete("/:uc_id", async (req, res) => {
+router.delete("/:uc_id", async (req: Request, res: Response) => {
 	try {
 		const result = await db.query("DELETE FROM userCircle WHERE uc_id = $1", [
 			req.params.uc_id,
 		]);
 		res.status(200).json({ message: "UserCircle deleted!" });
-	} catch (err) {
+	} catch (err: unknown) {
 		console.error("Error deleting the userCircle: ", err);
 	}
 });
