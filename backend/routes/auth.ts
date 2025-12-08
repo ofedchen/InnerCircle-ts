@@ -39,7 +39,7 @@ async function checkPassword(
 
 router.post(
   "/signup",
-  async (req: Request<{}, any, SignupBody>, res: Response) => {
+  async (req: Request<void, void, SignupBody>, res: Response) => {
     const { userName, email, password } = req.body;
 
     if (!userName || !email || !password) {
@@ -75,7 +75,7 @@ router.post(
 
 router.post(
   "/login",
-  async (req: Request<{}, any, LoginBody>, res: Response) => {
+  async (req: Request<void, void, LoginBody>, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
