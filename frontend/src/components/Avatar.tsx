@@ -12,7 +12,6 @@ type AvatarProps = {
 export default function Avatar({
 	src,
 	name,
-	alt,
 	tierColor,
 	variant,
 	className,
@@ -39,7 +38,7 @@ export default function Avatar({
 			>
 				<img
 					src={src}
-					alt={alt}
+					alt={name}
 					loading="lazy"
 					className={`rounded-full object-cover border-4 border-(--avatar-border) shadow-[4px_4px_8px_-3px_var(--orange-dark)] ${avatarSize}`}
 				/>
