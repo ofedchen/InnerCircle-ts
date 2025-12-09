@@ -12,14 +12,22 @@ const date = comment.date.toLocaleString("fr-FR", {
   timeStyle: "short",
 });
 
+beforeEach(function () {
+  cy.mount(
+    <Comment
+      date={comment.date}
+      author={comment.author}
+      commentText={comment.commentText}
+    />
+  );
+});
+
 describe("Comment component", () => {
   it("renders", () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<Comment />);
   });
 
   it("has an h3 element and a p element", function () {
-    cy.mount(<Comment />);
     cy.get("[data-cy='comment-author']").should("exist");
     cy.get("[data-cy='comment-text']").should("exist");
   });
@@ -29,7 +37,6 @@ describe("Comment component", () => {
       dateStyle: "short",
       timeStyle: "short",
     });
-    cy.mount(<Comment date={comment.date} />);
     cy.get("[data-cy='comment-date']")
       .should("exist")
       .should("contain", "Date: ")
@@ -37,13 +44,6 @@ describe("Comment component", () => {
   });
 
   it("renders correct comment author, text and date from props", function () {
-    cy.mount(
-      <Comment
-        date={comment.date}
-        author={comment.author}
-        commentText={comment.commentText}
-      />
-    );
     cy.get("[data-cy='comment-author']").should("have.text", "Ben");
     cy.get("[data-cy='comment-text']").should(
       "contain",

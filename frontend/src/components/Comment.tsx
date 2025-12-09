@@ -1,14 +1,14 @@
 type CommentProps = {
-  author?: string;
-  date?: Date;
-  commentText?: string;
+  author: string;
+  date: Date;
+  commentText: string;
 };
 
 export default function Comment({ date, author, commentText }: CommentProps) {
   return (
     <>
-      <h3 data-cy="comment-author">{author ? author : ""}</h3>
-      <p data-cy="comment-text">{commentText ? commentText : ""}</p>
+      <h3 data-cy="comment-author">{author}</h3>
+      <p data-cy="comment-text">{commentText}</p>
       {date && (
         <h4 data-cy="comment-date">
           Date:{" "}
