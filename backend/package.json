@@ -16,5 +16,9 @@
     "eslint": "^9.39.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "dev": "tsx --watch index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
