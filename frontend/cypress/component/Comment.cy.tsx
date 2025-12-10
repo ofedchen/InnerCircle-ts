@@ -12,8 +12,6 @@ const date = comment.date.toLocaleString("fr-FR", {
   timeStyle: "short",
 });
 
-// const initial = comment.author.charAt(0).toUpperCase()
-
 beforeEach(function () {
   cy.mount(
     <Comment
