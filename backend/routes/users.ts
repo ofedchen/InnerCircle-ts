@@ -1,5 +1,11 @@
 import { Router, Request, Response } from "express";
 import * as db from "../db/index.js";
+import fs from "fs";
+import cors from "cors";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "node:url";
+import { customAlphabet } from "nanoid";
 
 const router = Router();
 
@@ -17,6 +23,33 @@ interface UpdateUserBody {
 	userAvatar?: string;
 	userPayment?: string;
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootPublicPath = path.join(
+	__dirname,
+	"../../frontend/public/images/athletes"
+);
+const nanoid = customAlphabet("0123456789", 4);
+
+const storage = multer.diskStorage({
+	destination: (req: Request, file: any, cb) => {
+		const uploadDir = path.join(
+			rootPublicPath,
+			"../../frontend/public/images/athletes"
+		);
+		if (!fs.existsSync(uploadDir)) {
+			fs.mkdirSync(uploadDir, { recursive: true });
+		}
+		cb(null, uploadDir);
+	},
+	filename: (req, file, cb) => {
+		const id = Number(nanoid());
+		cb(null, `${id} + '-' + file.originalname`);
+	},
+});
+
+const upload = multer({ storage });
 
 router.get("/", async (req: Request, res: Response) => {
 	try {
@@ -45,6 +78,70 @@ router.get(
 			const message = err instanceof Error ? err.message : String(err);
 			res.status(500).json({
 				error: "Failed to fetch the user",
+				message,
+			});
+		}
+	}
+);
+
+router.post(
+	"/:users_id/avatar",
+	upload.single("avatar"),
+	async (req: Request<{ users_id: string }>, res: Response) => {
+		try {
+			if (!req.file) {
+				return res.status(400).json({ error: "No file uploaded" });
+			}
+
+			const file = req.file;
+			const userId = req.params.users_id;
+			const uploadDir = path.join(
+				rootPublicPath,
+				"../../frontend/public/images/athletes"
+			);
+
+			const userResult = await db.query(
+				"SELECT users_name FROM users WHERE users_id = $1",
+				[userId]
+			);
+
+			if (userResult.rows.length === 0) {
+				if (fs.existsSync(file.path)) {
+					fs.unlinkSync(file.path);
+				}
+				return res.status(404).json({ error: "User not found" });
+			}
+
+			const userName = userResult.rows[0].users_name;
+			const ext = path.extname(file.originalname);
+			const newFilename = `${userName}${ext}`;
+			const newPath = path.join(uploadDir, newFilename);
+
+			try {
+				fs.renameSync(file.path, newPath);
+				const avatarPath = `images/athletes/${newFilename}`;
+				const result = await db.query(
+					"UPDATE users SET users_avatar = $1 WHERE users_id = $2 RETURNING *",
+					[avatarPath, userId]
+				);
+
+				res.status(200).json({
+					message: "Avatar uploaded successfully",
+					user: result.rows[0],
+					avatarPath,
+				});
+			} catch (renameErr) {
+				console.error("Error renaming file:", renameErr);
+				if (fs.existsSync(file.path)) {
+					fs.unlinkSync(file.path);
+				}
+				res.status(500).json({ error: "Error processing uploaded file" });
+			}
+		} catch (err: unknown) {
+			console.error("Error uploading avatar:", err);
+			const message = err instanceof Error ? err.message : String(err);
+			res.status(500).json({
+				error: "Failed to upload avatar",
 				message,
 			});
 		}
