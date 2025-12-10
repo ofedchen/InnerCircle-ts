@@ -12,6 +12,8 @@ const date = comment.date.toLocaleString("fr-FR", {
   timeStyle: "short",
 });
 
+// const initial = comment.author.charAt(0).toUpperCase()
+
 beforeEach(function () {
   cy.mount(
     <Comment
@@ -54,4 +56,8 @@ describe("Comment component", () => {
       .should("contain", "Date: ")
       .should("contain", date);
   });
+
+  it("shows user initials in avatar", function() {
+    cy.get("[data-cy='comment-avatar']").should("exist").should("have.text", "B")
+  })
 });
