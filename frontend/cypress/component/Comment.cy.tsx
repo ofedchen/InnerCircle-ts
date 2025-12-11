@@ -2,7 +2,7 @@ import React from "react";
 import Comment from "../../src/components/Comment.tsx";
 
 const comment = {
-  author: "Ben",
+  author: "Ben Franklin",
   commentText: "The best video ever made, thank you",
   date: new Date(Date.now()),
 };
@@ -55,7 +55,15 @@ describe("Comment component", () => {
       .should("contain", date);
   });
 
-  it("shows user initials in avatar", function() {
-    cy.get("[data-cy='comment-avatar']").should("exist").should("have.text", "B")
-  })
+  it("shows the first letter of user initials in avatar", function () {
+    cy.get("[data-cy='comment-avatar']")
+      .should("exist")
+      .should("have.text", "B");
+  });
+
+  it("shows 2 letters of user initials if the username is more than 1 word", function () {
+    cy.get("[data-cy='comment-avatar']")
+      .should("exist")
+      .should("have.text", "BF");
+  });
 });

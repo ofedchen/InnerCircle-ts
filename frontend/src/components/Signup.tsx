@@ -152,7 +152,7 @@ const Signup = (props: SignUpProps) => {
             <FormLabel>Name</FormLabel>
             <Input
               name="userName"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUserName(e.target.value.trim())}
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
               placeholder="Name"
