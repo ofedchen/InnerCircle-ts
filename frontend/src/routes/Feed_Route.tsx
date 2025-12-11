@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/joy";
 import Post from "../components/Post";
 import { useUser } from "../hooks/useUser";
-import { PostMediaProps, CircleDetails, FeedPost } from "../types";
+import type { PostMediaProps, FeedPost } from "../types";
 
 export default function Feed() {
 	const [feedPost, setCircles] = useState<FeedPost[]>([]);
@@ -80,7 +80,7 @@ export default function Feed() {
 									{...mediaProps}
 									blurred={shouldBlur}
 									slug={p.circle_slug}
-									circleId={p.circle_id}
+									circleId={p.post_author}
 								/>
 							</>
 						);
