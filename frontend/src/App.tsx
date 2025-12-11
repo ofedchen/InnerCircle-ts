@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="*" element={<div>404 Not Found</div>} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/feed/:postId" element={< PostRoute />} />
+          <Route path="/feed/:postId" element={<PostRoute />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:categoryName" element={<Category />} />

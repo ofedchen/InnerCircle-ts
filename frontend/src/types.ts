@@ -67,7 +67,7 @@ export type UserData = {
   users_payment: string;
 };
 
-export type Comment = {
+export type CommentType = {
   comment_id: number;
   comment_author: string;
   comment_text: string;

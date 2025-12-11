@@ -5,6 +5,7 @@ import Avatar from "../components/Avatar";
 import Post from "../components/Post";
 import AuthModal from "../components/AuthModal";
 import type { CircleDetails, PostMediaProps, PostType, Tier } from "../types";
+import { getMediaProps } from "../utils/utils";
 
 export default function CirclePage() {
   const { circleId, circleSlug } = useParams();
@@ -56,7 +57,6 @@ export default function CirclePage() {
     fetch(`/api/posts/all/${circleId}`)
       .then((response) => response.json())
       .then((result: PostType[]) => {
-        console.log(result);
         setCirclePosts(result);
       });
   }, [circleId]);
@@ -134,15 +134,7 @@ export default function CirclePage() {
         </h2>
         {circlePosts &&
           circlePosts.map((p) => {
-            const mediaProps: PostMediaProps = {};
-            if (p.post_content) {
-              if (p.post_content.includes("image")) {
-                mediaProps.postImg = p.post_content;
-              } else {
-                mediaProps.video = p.post_content;
-              }
-            }
-
+            const mediaProps: PostMediaProps = getMediaProps(p.post_content);
             const blurred: boolean = shouldBlur(p.post_tier, userTier);
 
             return (
@@ -151,6 +143,7 @@ export default function CirclePage() {
                 className="flex flex-col justify-center items-center px-4"
               >
                 <Post
+                  postId={p.post_id}
                   title={p.post_title}
                   text={p.post_text}
                   tier={p.post_tier}

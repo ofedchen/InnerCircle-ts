@@ -8,7 +8,8 @@ type PostProps = {
   title: string;
   text: string;
   tier: Tier;
-  blurred: boolean;
+  postId: number;
+  blurred?: boolean;
   video?: string;
   postImg?: string;
   avatar?: string;
@@ -18,10 +19,11 @@ export default function Post({
   slug,
   circleId,
   title,
-  video,
-  postImg,
   text,
   tier,
+  postId,
+  video,
+  postImg,
   avatar,
   blurred,
 }: PostProps) {
@@ -49,13 +51,13 @@ export default function Post({
           src={avatar}
           variant="small"
           className="self-start ml-[-2px] mt-[-6px] relative z-50"
-		  slug={slug}
+          slug={slug}
         />
       </Link>
 
       <div
         id="post-content"
-        className={`bg-(--orange-lighter)  rounded-md mt-[-60px] relative z-10 ${lockedPost}`}
+        className={`rounded-md mt-[-60px] relative z-10 ${lockedPost}`}
       >
         {video ? (
           <iframe
@@ -71,17 +73,21 @@ export default function Post({
           <img src={postImg} />
         )}
       </div>
-      <h3
-        className={`text-(--orange-main) text-semibold text-xl pt-4 pb-2 ${textWrap} ${lockedPost}`}
-      >
-        {title}
-      </h3>
+      <Link to={`/feed/${postId}`}>
+        <h3
+          className={`text-(--orange-main) text-semibold text-xl pt-4 pb-2 ${textWrap} ${lockedPost}`}
+        >
+          {title}
+        </h3>
+      </Link>
       <p className={`text-(--orange-white) py-2 ${lockedPost}`}>{text}</p>
       {!blurred && (
-        <button className="self-end mr-[-12px]  bg-(--purple-darker) text-(--orange-main) rounded-md px-4 py-2  hover:bg-(--purple-darker)">
-          {" "}
-          TO POST{" "}
-        </button>
+        <Link to={`/feed/${postId}`}>
+          <button className="self-end mr-[-12px]  bg-(--purple-darker) text-(--orange-main) rounded-md px-4 py-2  hover:bg-(--purple-darker)">
+            {" "}
+            TO POST{" "}
+          </button>
+        </Link>
       )}
     </div>
   );
