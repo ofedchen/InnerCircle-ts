@@ -1,10 +1,19 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import type { PostType } from "../types";
+import { useEffect, useState } from "react";
+import Post from "../components/Post";
+import type { FeedPost } from "../types";
 
 export default function PostRoute() {
-  const { postId } = useParams();
-  const [post, setPost] = useState<PostType | null>(null);
+  const { postId } = useParams<string>();
+  const [postDetails, setPostDetails] = useState<FeedPost | null>(null);
 
-  return <></>;
+  useEffect(() => {
+    fetch(`/api/posts/${postId}`)
+      .then((response) => response.json())
+      .then((result: FeedPost) => {
+        setPostDetails(result);
+      });
+  }, [postId]);
+
+  return <>{postDetails && <Post />}</>;
 }

@@ -38,8 +38,8 @@ router.get("/feed/:users_id", async (req: Request, res: Response) => {
       p.post_content,
       p.post_date,
       p.post_tier,
-	  p.post_author,
-	  c.circle_slug,
+	    p.post_author,
+	    c.circle_slug,
       c.circle_name,
       c.circle_avatar,
       uc.uc_circle_tier
