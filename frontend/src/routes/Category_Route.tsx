@@ -1,8 +1,7 @@
 import { Link, useParams } from "react-router-dom";
-import { Button } from "@mui/joy";
-import Avatar from "../components/Avatar";
 import { useEffect, useState } from "react";
-import { CircleDetails } from "../types";
+import Avatar from "../components/Avatar";
+import type { CircleDetails } from "../types";
 
 export default function Category() {
 	const { categoryName } = useParams();
@@ -38,7 +37,6 @@ export default function Category() {
 										<Avatar
 											src={athlete.circle_avatar}
 											name={athlete.circle_name}
-											alt={athlete.circle_name}
 											variant="large"
 											tierColor={null}
 										/>
