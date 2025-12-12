@@ -159,7 +159,12 @@ const AuthModal = ({
           open={signUpOpen}
           size="lg"
         >
-          <Signup toggleClose={closeSignup} toggleLogin={switchToLogin} />
+          <Signup
+            toggleClose={closeSignup}
+            toggleLogin={switchToLogin}
+            toggleJoin={switchToJoin}
+            modalType={modalType}
+          />
         </Drawer>
         {(modalType === "join" || modalType === "manage") &&
           hasMembershipProps && (

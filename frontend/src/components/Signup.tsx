@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,7 +10,7 @@ import {
   Input,
   Stack,
 } from "@mui/joy";
-import type { AuthFormData } from "../types.ts";
+import type { AuthFormData, ModalType } from "../types.ts";
 import { useUser } from "../hooks/useUser.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -18,6 +19,8 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
 type SignUpProps = {
   toggleClose: () => void;
   toggleLogin: () => void;
+  toggleJoin: () => void;
+  modalType: ModalType;
 };
 
 const Signup = (props: SignUpProps) => {
@@ -39,8 +42,10 @@ const Signup = (props: SignUpProps) => {
 
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [agreedToTerms, setAgreedToTerms] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const { login } = useUser();
+  const navigate = useNavigate();
 
   const checkboxLabel = (
     <span>
@@ -97,7 +102,7 @@ const Signup = (props: SignUpProps) => {
       const result = await response.json();
 
       if (!response.ok) {
-        console.error("Signup failed:", result.error);
+        setError(result.error || "Signup failed");
         return;
       }
 
@@ -105,12 +110,14 @@ const Signup = (props: SignUpProps) => {
       if (result.user) {
         login(result.user.users_id);
         props.toggleClose();
-        props.toggleLogin();
+        if (props.modalType === "join") props.toggleJoin();
+        else navigate("/feed");
       }
 
       resetForm();
     } catch (error) {
       console.error("Signup error:", error);
+      setError("An unexpected error occurred");
     }
   }
 
@@ -121,6 +128,7 @@ const Signup = (props: SignUpProps) => {
     setMatchPwd("");
     setShowPassword(false);
     setAgreedToTerms(false);
+    setError("");
 
     setValidName(false);
     setValidEmail(false);
@@ -152,6 +160,7 @@ const Signup = (props: SignUpProps) => {
         }}
       >
         <Stack spacing={1}>
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <FormControl error={!validName && !!userName && !userFocus}>
             <FormLabel>Name</FormLabel>
             <Input
