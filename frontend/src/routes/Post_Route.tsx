@@ -1,7 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button, Divider } from "@mui/joy";
-import type { FeedPost, CommentType, CommentBody } from "../types";
+import type {
+  FeedPost,
+  CommentType,
+  CommentBody,
+  UserCircleType,
+} from "../types";
 import { getMediaProps } from "../utils/utils";
 import Avatar from "../components/Avatar";
 import Comment from "../components/Comment";
@@ -30,15 +35,12 @@ export default function PostRoute() {
 
   useEffect(() => {
     if (userId && postDetails) {
-      console.log(postDetails);
       fetch(`/api/user-circles/${userId}`)
         .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          const membership = result.find(
-            (uc) => uc.circle_id === postDetails.post_author
+        .then((result: UserCircleType[]) => {
+          const membership: UserCircleType = result.find(
+            (uc: UserCircleType) => uc.circle_id === postDetails.post_author
           );
-          console.log(membership);
           if (membership) {
             const tierHierarchy = { Bronze: 1, Silver: 2, Gold: 3 };
             setIsLockedPost(
@@ -96,13 +98,17 @@ export default function PostRoute() {
     <div className="wrapper-dark">
       <article className="bg-(--purple-light) flex flex-col items-center px-2 py-2 mx-2 my-4 border border-gray-500 rounded-lg">
         <div className="grid grid-cols-[1fr_2fr] grid-rows-2 items-center gap-x-8 pt-2 pb-2">
-          <Avatar
+          <Link
+            to={`/circle/${postDetails.post_author}/${postDetails.circle_slug}`}
             className="row-span-2"
-            src={postDetails.circle_avatar}
-            name={postDetails.circle_name}
-            variant="small"
-            tierColor={postDetails.post_tier}
-          />
+          >
+            <Avatar
+              src={postDetails.circle_avatar}
+              name={postDetails.circle_name}
+              variant="small"
+              tierColor={postDetails.post_tier}
+            />
+          </Link>
           <h1 className="text-2xl font-semibold py-2">
             {postDetails.post_title}
           </h1>
@@ -113,7 +119,11 @@ export default function PostRoute() {
             })}
           </h3>
         </div>
-        <div className="py-4 px-2 bg-(--purple-white) border border-gray-500 rounded-lg">
+        <div
+          className={`py-4 px-2 bg-(--purple-white) border border-gray-500 rounded-lg ${
+            isLockedPost ? "blur-sm" : ""
+          }`}
+        >
           <p className="pb-4 px-2">{postDetails.post_text}</p>
           {mediaProps.video ? (
             <iframe

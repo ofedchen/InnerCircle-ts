@@ -64,8 +64,7 @@ export default function Post({
             className="w-full aspect-video rounded-t-md"
             src={`https://www.youtube.com/embed/${video}`}
             title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           ></iframe>
