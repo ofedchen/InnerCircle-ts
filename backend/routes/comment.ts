@@ -73,13 +73,25 @@ router.post(
 
     try {
       const result = await db.query(
-        "INSERT INTO comment (comment_author, comment_text, post_id) VALUES($1, $2, $3) RETURNING comment_id",
+        `INSERT INTO comment (comment_author, comment_text, post_id) 
+         VALUES($1, $2, $3) 
+         RETURNING comment_id, comment_author, comment_text, comment_date, post_id`,
         [userId, commentText, postId]
       );
 
+      const userResult = await db.query(
+        "SELECT users_name FROM users WHERE users_id = $1",
+        [userId]
+      );
+
+      const comment = {
+        ...result.rows[0],
+        users_name: userResult.rows[0].users_name,
+      };
+
       res.status(201).json({
         message: "new comment added successfully",
-        comment: result.rows[0],
+        comment,
       });
     } catch (err: unknown) {
       console.error("Error adding comment: ", err);

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { FeedPost, CommentType } from "../types";
+import { Button, Divider } from "@mui/joy";
+import type { FeedPost, CommentType, CommentBody } from "../types";
 import { getMediaProps } from "../utils/utils";
 import Avatar from "../components/Avatar";
 import Comment from "../components/Comment";
@@ -29,12 +30,15 @@ export default function PostRoute() {
 
   useEffect(() => {
     if (userId && postDetails) {
-      fetch(`/api/userCircles/${userId}`)
+      console.log(postDetails);
+      fetch(`/api/user-circles/${userId}`)
         .then((response) => response.json())
         .then((result) => {
-          const membership = result.find((uc) => {
-            uc.circle_id === postDetails.post_author;
-          });
+          console.log(result);
+          const membership = result.find(
+            (uc) => uc.circle_id === postDetails.post_author
+          );
+          console.log(membership);
           if (membership) {
             const tierHierarchy = { Bronze: 1, Silver: 2, Gold: 3 };
             setIsLockedPost(
@@ -45,6 +49,38 @@ export default function PostRoute() {
         });
     }
   }, [userId, postDetails]);
+
+  async function postComment() {
+    const commentBody: CommentBody = {
+      userId: userId,
+      commentText: commentText,
+      postId: Number(postId),
+    };
+
+    try {
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentBody),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        return;
+      }
+
+      if (result.comment) {
+        setComments([...comments, result.comment]);
+      }
+
+      setCommentText("");
+    } catch (error) {
+      console.error("Signup error:", error);
+    }
+  }
 
   if (!postDetails) {
     return (
@@ -57,9 +93,9 @@ export default function PostRoute() {
   const mediaProps = getMediaProps(postDetails.post_content);
 
   return (
-    <div className="wrapper">
-      <article className="flex flex-col items-center px-4 py-2">
-        <div className="grid grid-cols-[1fr_2fr] grid-rows-2 items-center gap-x-8 pt-6 pb-2">
+    <div className="wrapper-dark">
+      <article className="bg-(--purple-light) flex flex-col items-center px-2 py-2 mx-2 my-4 border border-gray-500 rounded-lg">
+        <div className="grid grid-cols-[1fr_2fr] grid-rows-2 items-center gap-x-8 pt-2 pb-2">
           <Avatar
             className="row-span-2"
             src={postDetails.circle_avatar}
@@ -84,16 +120,17 @@ export default function PostRoute() {
               className="w-full aspect-video rounded-t-md"
               src={`https://www.youtube.com/embed/${mediaProps.video}`}
               title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             ></iframe>
           ) : (
             mediaProps.postImg && <img src={mediaProps.postImg} />
           )}
-          <section>
-            <h3 className="font-semibold pt-6">Comments: </h3>
+          <section className="pt-4">
+            <Divider>
+              <h3 className="font-semibold text-black text-lg">Comments: </h3>
+            </Divider>
             {comments.length > 0 ? (
               comments.map((comment) => {
                 return (
@@ -109,12 +146,27 @@ export default function PostRoute() {
               <p>No comments yet</p>
             )}
             {!isLockedPost && (
-              <form action="POST">
-                <label htmlFor="new-comment">
+              <form
+                className="py-4"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  postComment();
+                }}
+              >
+                <label
+                  className="w-full font-semibold py-4"
+                  htmlFor="new-comment"
+                >
                   Add your comment:
-                  <input type="text" id="new-comment" value={commentText} />
+                  <input
+                    className="border rounded-lg h-12 w-full bg-(--neutral-light) my-2 font-normal text-md"
+                    type="text"
+                    id="new-comment"
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                  />
                 </label>
-                <button type="submit">Post comment</button>
+                <Button type="submit">Post comment</Button>
               </form>
             )}
           </section>

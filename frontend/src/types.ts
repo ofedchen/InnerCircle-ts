@@ -74,3 +74,9 @@ export type CommentType = {
   comment_date: Date | string;
   users_name: string;
 };
+
+export type CommentBody = {
+  userId: string;
+  commentText: string;
+  postId: number;
+};
