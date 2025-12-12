@@ -35,14 +35,14 @@ const AuthModal = ({
   const [signUpOpen, setSignupOpen] = useState<boolean>(false);
   const [joinOpen, setJoinOpen] = useState<boolean>(false);
 
-  const hasMembershipProps =
-    circleName &&
-    circleId &&
-    userId &&
-    userTier !== undefined &&
-    ucId !== undefined &&
-    handleJoin &&
-    handleCancel;
+  // const hasMembershipProps =
+  //   circleName &&
+  //   circleId &&
+  //   userId &&
+  //   userTier !== undefined &&
+  //   ucId !== undefined &&
+  //   handleJoin &&
+  //   handleCancel;
 
   const toggleLoginDrawer =
     (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -166,26 +166,25 @@ const AuthModal = ({
             modalType={modalType}
           />
         </Drawer>
-        {(modalType === "join" || modalType === "manage") &&
-          hasMembershipProps && (
-            <Drawer
-              anchor="bottom"
-              onClose={toggleJoinDrawer(false)}
-              open={joinOpen}
-              size={modalType === "join" ? "lg" : "sm"}
-            >
-              <JoinCircle
-                circleName={circleName}
-                circleId={circleId}
-                modalType={modalType}
-                handleMembership={handleJoin}
-                cancelMembership={handleCancel}
-                userId={userId}
-                userTier={userTier}
-                ucId={ucId}
-              />
-            </Drawer>
-          )}
+        {(modalType === "join" || modalType === "manage") && (
+          <Drawer
+            anchor="bottom"
+            onClose={toggleJoinDrawer(false)}
+            open={joinOpen}
+            size={modalType === "join" ? "lg" : "sm"}
+          >
+            <JoinCircle
+              circleName={circleName}
+              circleId={circleId}
+              modalType={modalType}
+              handleMembership={handleJoin}
+              cancelMembership={handleCancel}
+              userId={userId}
+              userTier={userTier}
+              ucId={ucId}
+            />
+          </Drawer>
+        )}
       </section>
     </section>
   );
