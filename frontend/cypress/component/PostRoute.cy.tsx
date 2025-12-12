@@ -6,4 +6,9 @@ describe('<PostRoute />', () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(<PostRoute />)
   })
+
+    it('renders ', () => {
+    // see: https://on.cypress.io/mounting-react
+    cy.mount(<PostRoute />)
+  })
 })

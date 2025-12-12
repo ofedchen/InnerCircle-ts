@@ -79,7 +79,7 @@ router.post(
 
       res.status(201).json({
         message: "new comment added successfully",
-        userCircle: result.rows[0],
+        comment: result.rows[0],
       });
     } catch (err: unknown) {
       console.error("Error adding comment: ", err);

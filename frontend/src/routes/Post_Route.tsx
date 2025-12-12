@@ -4,11 +4,16 @@ import type { FeedPost, CommentType } from "../types";
 import { getMediaProps } from "../utils/utils";
 import Avatar from "../components/Avatar";
 import Comment from "../components/Comment";
+import { useUser } from "../hooks/useUser";
 
 export default function PostRoute() {
   const { postId } = useParams<string>();
   const [postDetails, setPostDetails] = useState<FeedPost | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
+  const [isLockedPost, setIsLockedPost] = useState<boolean>(true);
+  const [commentText, setCommentText] = useState<string>("");
+
+  const { userId } = useUser();
 
   useEffect(() => {
     fetch(`/api/posts/${postId}`)
@@ -21,6 +26,25 @@ export default function PostRoute() {
       .then((response) => response.json())
       .then((result: CommentType[]) => setComments(result));
   }, [postId]);
+
+  useEffect(() => {
+    if (userId && postDetails) {
+      fetch(`/api/userCircles/${userId}`)
+        .then((response) => response.json())
+        .then((result) => {
+          const membership = result.find((uc) => {
+            uc.circle_id === postDetails.post_author;
+          });
+          if (membership) {
+            const tierHierarchy = { Bronze: 1, Silver: 2, Gold: 3 };
+            setIsLockedPost(
+              tierHierarchy[membership.uc_circle_tier] <
+                tierHierarchy[postDetails.post_tier]
+            );
+          }
+        });
+    }
+  }, [userId, postDetails]);
 
   if (!postDetails) {
     return (
@@ -68,21 +92,32 @@ export default function PostRoute() {
           ) : (
             mediaProps.postImg && <img src={mediaProps.postImg} />
           )}
-          <h3 className="font-semibold pt-6">Comments: </h3>
-          {comments.length > 0 ? (
-            comments.map((comment) => {
-              return (
-                <Comment
-                  key={comment.comment_id}
-                  author={comment.users_name}
-                  commentText={comment.comment_text}
-                  date={new Date(comment.comment_date)}
-                />
-              );
-            })
-          ) : (
-            <p>No comments yet</p>
-          )}
+          <section>
+            <h3 className="font-semibold pt-6">Comments: </h3>
+            {comments.length > 0 ? (
+              comments.map((comment) => {
+                return (
+                  <Comment
+                    key={comment.comment_id}
+                    author={comment.users_name}
+                    commentText={comment.comment_text}
+                    date={new Date(comment.comment_date)}
+                  />
+                );
+              })
+            ) : (
+              <p>No comments yet</p>
+            )}
+            {!isLockedPost && (
+              <form action="POST">
+                <label htmlFor="new-comment">
+                  Add your comment:
+                  <input type="text" id="new-comment" value={commentText} />
+                </label>
+                <button type="submit">Post comment</button>
+              </form>
+            )}
+          </section>
         </div>
       </article>
     </div>

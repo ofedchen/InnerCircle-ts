@@ -11,9 +11,9 @@ POST http://localhost:3000/api/signup
 Content-Type: application/json
 
 {
-    "userName": "lill H",
-    "email": "adbc@example.com",
-    "password": "testpassword123"
+    "userName": "noobie",
+    "email": "noob@nejla.com",
+    "password": "Pass1234%"
 }
 
 ### all posts

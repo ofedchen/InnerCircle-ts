@@ -10,6 +10,7 @@ import {
   Stack,
 } from "@mui/joy";
 import type { AuthFormData } from "../types.ts";
+import { useUser } from "../hooks/useUser.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
@@ -38,6 +39,8 @@ const Signup = (props: SignUpProps) => {
 
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [agreedToTerms, setAgreedToTerms] = useState<boolean>(false);
+
+  const { login } = useUser();
 
   const checkboxLabel = (
     <span>
@@ -83,7 +86,7 @@ const Signup = (props: SignUpProps) => {
 
   async function signUp(formData: AuthFormData) {
     try {
-      const response = await fetch("/api/signup/", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,24 +94,23 @@ const Signup = (props: SignUpProps) => {
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        console.error("Signup failed:", result.error);
+        return;
       }
 
-      const result = await response.json();
-      console.log("Success:", result);
-
+      // Auto-login if success
       if (result.user) {
-        localStorage.setItem("userId", result.user.users_id);
-        console.log(result.user.users_id);
-
+        login(result.user.users_id);
         props.toggleClose();
         props.toggleLogin();
       }
 
       resetForm();
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Signup error:", error);
     }
   }
 
@@ -143,7 +145,9 @@ const Signup = (props: SignUpProps) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries()) as AuthFormData;
+          const formJson = Object.fromEntries(
+            formData.entries()
+          ) as AuthFormData;
           signUp(formJson);
         }}
       >

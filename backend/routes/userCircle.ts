@@ -1,7 +1,14 @@
 import { Router, Request, Response } from "express";
 import * as db from "../db/index.js";
+import type { Tier } from "../../frontend/src/types.js";
 
 const router = Router();
+
+type UserCircleBody = {
+  userId: string;
+  circleId: number;
+  circleTier: Tier;
+};
 
 router.get("/:users_id", async (req: Request, res: Response) => {
   const query = `
@@ -71,38 +78,41 @@ router.get("/feed/:users_id", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
-  const { userId, circleId, circleTier } = req.body;
+router.post(
+  "/",
+  async (req: Request<void, void, UserCircleBody>, res: Response) => {
+    const { userId, circleId, circleTier } = req.body;
 
-  if (!circleTier) {
-    return res.status(400).json({ error: "Please select the tier." });
+    if (!circleTier) {
+      return res.status(400).json({ error: "Please select the tier." });
+    }
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ error: "You should be logged in to step inside the circle" });
+    }
+
+    if (!circleId) {
+      return res.status(400).json({ error: "Select the circle to join" });
+    }
+
+    try {
+      const result = await db.query(
+        "INSERT INTO userCircle (uc_user_id, uc_circle_id, uc_circle_tier) VALUES($1, $2, $3) RETURNING uc_id",
+        [userId, circleId, circleTier]
+      );
+
+      res.status(201).json({
+        message: "new userCircle created successfully",
+        userCircle: result.rows[0],
+      });
+    } catch (err: unknown) {
+      console.error("Error creating userCircle: ", err);
+      res.status(500).json({ error: "Failed to create a userCircle" });
+    }
   }
-
-  if (!userId) {
-    return res
-      .status(400)
-      .json({ error: "You should be logged in to step inside the circle" });
-  }
-
-  if (!circleId) {
-    return res.status(400).json({ error: "Select the circle to join" });
-  }
-
-  try {
-    const result = await db.query(
-      "INSERT INTO userCircle (uc_user_id, uc_circle_id, uc_circle_tier) VALUES($1, $2, $3) RETURNING uc_id",
-      [userId, circleId, circleTier]
-    );
-
-    res.status(201).json({
-      message: "new userCircle created successfully",
-      userCircle: result.rows[0],
-    });
-  } catch (err: unknown) {
-    console.error("Error creating userCircle: ", err);
-    res.status(500).json({ error: "Failed to create a userCircle" });
-  }
-});
+);
 
 router.delete("/:uc_id", async (req: Request, res: Response) => {
   try {
