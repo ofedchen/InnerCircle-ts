@@ -61,9 +61,9 @@ export type PostType = {
 };
 
 export type ProfileUpdatesProps = {
-	userName: string;
-	userEmail: string;
-	userPayment: string;
+	userName?: string;
+	userEmail?: string;
+	userPayment?: string;
 };
 
 type SignUpForm = {

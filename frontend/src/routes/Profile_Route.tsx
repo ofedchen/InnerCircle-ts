@@ -18,6 +18,7 @@ import DialogActions from "@mui/joy/DialogActions";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import ChangeAvatar from "../components/ChangeAvatar";
 
 import { UserData, ProfileUpdatesProps } from "../types";
 
@@ -47,11 +48,13 @@ export default function Profile() {
 				console.error("Error fetching user data:", error);
 			});
 
-		fetch(`/api/user-circles/${userId}`)
-			.then((response) => response.json())
-			.then((data) => {
-				setMyCircles(data);
-			});
+		if (userId) {
+			fetch(`/api/user-circles/${userId}`)
+				.then((response) => response.json())
+				.then((data) => {
+					setMyCircles(data);
+				});
+		}
 	}, [userId]);
 
 	useEffect(() => {
@@ -65,7 +68,7 @@ export default function Profile() {
 	}, [newUsername, newUserEmail, newPaymentMethod, userData]);
 
 	async function handleSaveChanges() {
-		let updates: ProfileUpdatesProps;
+		let updates: ProfileUpdatesProps = {};
 
 		if (newUsername !== userData.users_name) {
 			updates.userName = newUsername;
@@ -128,27 +131,13 @@ export default function Profile() {
 			<div className="bg-(--purple-dark) min-h-screen">
 				<div
 					id="profile-hero"
-					className="flex flex-col self-start items-center justify-around text-2xl font-black w-full bg-(--purple-main) text-(--orange-lighter)  text-center"
+					className="flex flex-col self-start items-center pt-6 pb-6 px-2 gap-3 text-2xl font-black w-full bg-(--purple-main) text-(--orange-lighter)  text-center"
 				>
-					<h2> Welcome back {userData?.users_name}!</h2>
-					<div className="flex items-end">
-						<img className="h-40 w-40" src="/avatar1.webp" />
-						{/* removed change avatar functionality for now		<svg
-							className="ml-[-22px]"
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="lucide lucide-camera-icon lucide-camera"
-						>
-							<path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
-							<circle cx="12" cy="13" r="3" />
-						</svg> */}
+					<h2> Welcome back </h2>
+					<h2>{userData?.users_name}!</h2>
+					<div id="avatarbox">
+						<img className="avatar-center" src="/avatar1.webp" />
+						<ChangeAvatar userId={userId} className="avatar-change" />
 					</div>
 				</div>
 

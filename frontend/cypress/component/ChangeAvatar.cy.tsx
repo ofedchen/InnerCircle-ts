@@ -1,5 +1,4 @@
-import ChangeAvatar from "../../src/components/ChangeAvatar";
-import { UserProvider } from "../../src/contexts/UserProvider";
+import ChangeAvatar from "../../src/components/ChangeAvatar.tsx";
 
 describe("ChangeAvatar.cy.jsx", () => {
 	const mockUserId = "2";

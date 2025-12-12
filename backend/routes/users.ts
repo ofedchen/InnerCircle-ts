@@ -26,29 +26,22 @@ interface UpdateUserBody {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootPublicPath = path.join(
-	__dirname,
-	"../../frontend/public/images/athletes"
-);
+const uploadDir = path.resolve(__dirname, "../../frontend/public/images/users");
 const nanoid = customAlphabet("0123456789", 4);
 
 const storage = multer.diskStorage({
-	destination: (req: Request, file: any, cb) => {
-		const uploadDir = path.join(
-			rootPublicPath,
-			"../../frontend/public/images/athletes"
-		);
-		if (!fs.existsSync(uploadDir)) {
-			fs.mkdirSync(uploadDir, { recursive: true });
-		}
+	destination: (req: Request, _file: Express.Multer.File, cb) => {
 		cb(null, uploadDir);
 	},
-	filename: (req, file, cb) => {
+	filename: (_req: Request, file: Express.Multer.File, cb) => {
 		const id = Number(nanoid());
-		cb(null, `${id} + '-' + file.originalname`);
+		const timestamp = Date.now();
+		const ext = path.extname(file.originalname) || "";
+		const base = path.basename(file.originalname, ext).replace(/\s+/g, "_");
+		const safe = `${id}-${timestamp}-${base}${ext}`;
+		cb(null, safe);
 	},
 });
-
 const upload = multer({ storage });
 
 router.get("/", async (req: Request, res: Response) => {
@@ -90,15 +83,15 @@ router.post(
 	async (req: Request<{ users_id: string }>, res: Response) => {
 		try {
 			if (!req.file) {
+				console.log("Avatar uploaded without file in request");
 				return res.status(400).json({ error: "No file uploaded" });
 			}
 
 			const file = req.file;
 			const userId = req.params.users_id;
-			const uploadDir = path.join(
-				rootPublicPath,
-				"../../frontend/public/images/athletes"
-			);
+
+			console.log("Avatar upload: multer saved file at: ", file.path);
+			console.log("Configured the uploadDir:  ", uploadDir);
 
 			const userResult = await db.query(
 				"SELECT users_name FROM users WHERE users_id = $1",
@@ -112,28 +105,37 @@ router.post(
 				return res.status(404).json({ error: "User not found" });
 			}
 
-			const userName = userResult.rows[0].users_name;
+			const userName = userResult.rows[0].users_name || `user-${userId}`;
+			const safeUserName = String(userName).replace(/[^a-z0-9_\-]/gi, "_");
 			const ext = path.extname(file.originalname);
-			const newFilename = `${userName}${ext}`;
+			const newFilename = `${safeUserName}.webp`;
 			const newPath = path.join(uploadDir, newFilename);
 
 			try {
 				fs.renameSync(file.path, newPath);
-				const avatarPath = `images/athletes/${newFilename}`;
+				const avatarPath = `images/users/${newFilename}`;
 				const result = await db.query(
 					"UPDATE users SET users_avatar = $1 WHERE users_id = $2 RETURNING *",
 					[avatarPath, userId]
 				);
-
+				console.log("Avatar saved for user", userId, "->", avatarPath);
 				res.status(200).json({
 					message: "Avatar uploaded successfully",
 					user: result.rows[0],
 					avatarPath,
 				});
 			} catch (renameErr) {
-				console.error("Error renaming file:", renameErr);
+				console.error("Error renaming/moving uploaded file:", renameErr);
+
 				if (fs.existsSync(file.path)) {
-					fs.unlinkSync(file.path);
+					try {
+						fs.unlinkSync(file.path);
+					} catch (e) {
+						console.error(
+							"Failed to unlink temp upload after rename error:",
+							e
+						);
+					}
 				}
 				res.status(500).json({ error: "Error processing uploaded file" });
 			}
