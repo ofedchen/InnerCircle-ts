@@ -8,6 +8,7 @@ import type {
   UserCircleType,
 } from "../types";
 import { getMediaProps } from "../utils/utils";
+import AuthModal from "../components/AuthModal";
 import Avatar from "../components/Avatar";
 import Comment from "../components/Comment";
 import { useUser } from "../hooks/useUser";
@@ -120,23 +121,23 @@ export default function PostRoute() {
           </h3>
         </div>
         <div
-          className={`py-4 px-2 bg-(--purple-white) border border-gray-500 rounded-lg ${
-            isLockedPost ? "blur-sm" : ""
-          }`}
+          className={`py-4 px-2 bg-(--purple-white) border border-gray-500 rounded-lg`}
         >
-          <p className="pb-4 px-2">{postDetails.post_text}</p>
-          {mediaProps.video ? (
-            <iframe
-              className="w-full aspect-video rounded-t-md"
-              src={`https://www.youtube.com/embed/${mediaProps.video}`}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          ) : (
-            mediaProps.postImg && <img src={mediaProps.postImg} />
-          )}
+          <div className={`${isLockedPost ? "blur-sm" : ""}`}>
+            <p className="pb-4 px-2">{postDetails.post_text}</p>
+            {mediaProps.video ? (
+              <iframe
+                className="w-full aspect-video rounded-t-md"
+                src={`https://www.youtube.com/embed/${mediaProps.video}`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              mediaProps.postImg && <img src={mediaProps.postImg} />
+            )}
+          </div>
           <section className="pt-4">
             <Divider>
               <h3 className="font-semibold text-black text-lg">Comments: </h3>
@@ -155,7 +156,7 @@ export default function PostRoute() {
             ) : (
               <p>No comments yet</p>
             )}
-            {!isLockedPost && (
+            {!isLockedPost ? (
               <form
                 className="py-4"
                 onSubmit={(event) => {
@@ -178,6 +179,11 @@ export default function PostRoute() {
                 </label>
                 <Button type="submit">Post comment</Button>
               </form>
+            ) : (
+              <section className="text-center">
+                <p className="py-4">Log in to see the post and comment!</p>
+                <AuthModal modalType={"login"} />
+              </section>
             )}
           </section>
         </div>
