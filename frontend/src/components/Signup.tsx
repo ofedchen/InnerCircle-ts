@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,7 +10,8 @@ import {
   Input,
   Stack,
 } from "@mui/joy";
-import type { AuthFormData } from "../types.ts";
+import type { AuthFormData, ModalType } from "../types.ts";
+import { useUser } from "../hooks/useUser.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
@@ -17,6 +19,8 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%()&]).{8,24}$/;
 type SignUpProps = {
   toggleClose: () => void;
   toggleLogin: () => void;
+  toggleJoin: () => void;
+  modalType: ModalType;
 };
 
 const Signup = (props: SignUpProps) => {
@@ -38,6 +42,10 @@ const Signup = (props: SignUpProps) => {
 
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [agreedToTerms, setAgreedToTerms] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  const { login } = useUser();
+  const navigate = useNavigate();
 
   const checkboxLabel = (
     <span>
@@ -83,7 +91,7 @@ const Signup = (props: SignUpProps) => {
 
   async function signUp(formData: AuthFormData) {
     try {
-      const response = await fetch("/api/signup/", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,24 +99,25 @@ const Signup = (props: SignUpProps) => {
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        setError(result.error || "Signup failed");
+        return;
       }
 
-      const result = await response.json();
-      console.log("Success:", result);
-
+      // Auto-login if success
       if (result.user) {
-        localStorage.setItem("userId", result.user.users_id);
-        console.log(result.user.users_id);
-
+        login(result.user.users_id);
         props.toggleClose();
-        props.toggleLogin();
+        if (props.modalType === "join") props.toggleJoin();
+        else navigate("/feed");
       }
 
       resetForm();
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Signup error:", error);
+      setError("An unexpected error occurred");
     }
   }
 
@@ -119,6 +128,7 @@ const Signup = (props: SignUpProps) => {
     setMatchPwd("");
     setShowPassword(false);
     setAgreedToTerms(false);
+    setError("");
 
     setValidName(false);
     setValidEmail(false);
@@ -143,16 +153,19 @@ const Signup = (props: SignUpProps) => {
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries()) as AuthFormData;
+          const formJson = Object.fromEntries(
+            formData.entries()
+          ) as AuthFormData;
           signUp(formJson);
         }}
       >
         <Stack spacing={1}>
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <FormControl error={!validName && !!userName && !userFocus}>
             <FormLabel>Name</FormLabel>
             <Input
               name="userName"
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUserName(e.target.value.trim())}
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
               placeholder="Name"

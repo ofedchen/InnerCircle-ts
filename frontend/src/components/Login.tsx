@@ -16,6 +16,7 @@ const Login = (props: LoginProps) => {
   const [email, setEmail] = useState<string>("");
   const [pwd, setPwd] = useState<string>("");
   const [_pwdFocus, setPwdFocus] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -31,17 +32,22 @@ const Login = (props: LoginProps) => {
 
       const result = await response.json();
 
+      if (!response.ok) {
+        setError(result.error || "Login failed");
+        return;
+      }
+
       if (result.user) {
         login(result.user.users_id);
 
         props.toggleClose();
         if (props.modalType === "join") props.toggleJoin();
         else navigate("/feed");
+        resetForm();
       }
-
-      resetForm();
     } catch (error) {
       console.error("Error:", error);
+      setError("An unexpected error occurred");
     }
   }
 
@@ -49,6 +55,7 @@ const Login = (props: LoginProps) => {
     setEmail("");
     setPwd("");
     setPwdFocus(false);
+    setError("");
   }
 
   const handleSwitchToSignup = () => {
@@ -68,6 +75,9 @@ const Login = (props: LoginProps) => {
         }}
       >
         <Stack spacing={1.2}>
+          {error && (
+            <p className="text-red-500 text-center">{error}</p>
+          )}
           <FormControl>
             <FormLabel>Email</FormLabel>
             <Input

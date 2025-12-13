@@ -39,14 +39,14 @@ export interface PostType {
   post_date: Date | string;
   post_tier: Tier;
   post_author: number;
-};
+}
 
 export interface FeedPost extends PostType {
   circle_slug: string;
   circle_name: string;
   circle_avatar: string;
   uc_circle_tier?: Tier;
-};
+}
 
 export type PostMediaProps = {
   postImg?: string;
@@ -67,10 +67,25 @@ export type UserData = {
   users_payment: string;
 };
 
-export type Comment = {
+export type CommentType = {
   comment_id: number;
   comment_author: string;
   comment_text: string;
   comment_date: Date | string;
   users_name: string;
+};
+
+export type CommentBody = {
+  userId: string;
+  commentText: string;
+  postId: number;
+};
+
+export type UserCircleType = {
+  circle_avatar: string;
+  circle_id: number;
+  circle_name: string;
+  circle_slug: string;
+  uc_circle_tier: Tier;
+  uc_id: number;
 };

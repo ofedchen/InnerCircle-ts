@@ -11,6 +11,7 @@ import CirclePage from "./routes/Circle_Route";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
 import Terms from "./routes/Terms";
 import Category from "./routes/Category_Route";
+import PostRoute from "./routes/Post_Route";
 import "./App.css";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="*" element={<div>404 Not Found</div>} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/:postId" element={<PostRoute />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:categoryName" element={<Category />} />
