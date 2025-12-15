@@ -189,7 +189,7 @@ export default function PostRoute() {
                 <Button type="submit">Post comment</Button>
               </form>
             ) : (
-              <section className="text-center">
+              <section data-cy="login-to-comment" className="text-center">
                 <p className="py-4">Log in to see the post and comment!</p>
                 <AuthModal modalType={"login"} />
               </section>

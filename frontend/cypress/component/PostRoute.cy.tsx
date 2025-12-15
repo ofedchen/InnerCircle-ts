@@ -108,4 +108,57 @@ describe("<PostRoute />", () => {
       .its("request.url")
       .should("include", `/api/user-circles/${mockUserId}`);
   });
+
+  it("displays the form to add a new comment for the users with the correct membership tier", () => {
+    cy.get("[data-cy='add-comment']")
+      .find("input")
+      .type("awesome post, thanks for the inspo, Kelly!");
+    cy.get("[data-cy='add-comment']").find("button").click();
+  });
+
+  it("displays the login button for the users who aren't logged in", () => {
+    localStorage.removeItem("userId");
+    cy.get("[data-cy='login-to-comment']")
+      .find("button")
+      .should("contain", "LOG IN");
+
+    cy.get("[data-cy='add-comment']").should("not.exist");
+  });
+
+  it("submits a new comment", () => {
+    const commentBody = {
+      userId: mockUserId,
+      commentText: "awesome post, thanks for the inspo, Kelly!",
+      postId: mockPostId,
+    };
+
+    const newComment = {
+      comment_id: 10,
+      comment_author: mockUserId,
+      comment_text: commentBody.commentText,
+      comment_date: new Date().toISOString(),
+      post_id: mockPostId,
+      users_name: "Test",
+    };
+
+    cy.intercept("POST", `/api/comments`, {
+      statusCode: 201,
+      body: { comment: newComment },
+    }).as("postComment");
+
+    cy.get("[data-cy='add-comment']")
+      .find("input")
+      .type(commentBody.commentText);
+    cy.get("[data-cy='add-comment']").find("button").click();
+
+    cy.wait("@postComment")
+      .its("request.body")
+      .should("include", { commentText: commentBody.commentText });
+
+    cy.get("[data-cy='comment']")
+      .last()
+      .should("contain", commentBody.commentText);
+
+    cy.get("[data-cy='add-comment']").find("input").should("have.value", "");
+  });
 });
