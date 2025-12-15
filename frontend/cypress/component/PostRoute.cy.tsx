@@ -34,7 +34,6 @@ describe("<PostRoute />", () => {
   });
 
   it("renders the post route", () => {
-    cy.wait("@getPost");
     cy.get("[data-cy='post']").should("exist");
     cy.get("[data-cy='post-details']").should("exist");
   });
@@ -51,18 +50,47 @@ describe("<PostRoute />", () => {
       .should("include", `/api/comments/${mockPostId}`);
   });
 
-  it("displays post content from fixture", () => {
+  it("displays post author avatar", () => {
+    cy.get("[data-testid='avatar']")
+      .should("be.visible")
+      .find("p")
+      .should("have.text", "Kelly Slater");
+    cy.get("[data-testid='avatar']")
+      .find("img")
+      .should("exist")
+      .should("have.attr", "src", "/images/athletes/kelly-slater.webp");
+  });
+
+  it("avatar links to circle page", () => {
     cy.wait("@getPost");
+    cy.fixture("postRoute.json").then((post) => {
+      cy.get("[data-testid='avatar']")
+        .parent("a")
+        .should(
+          "have.attr",
+          "href",
+          `/circle/${post.post_author}/${post.circle_slug}`
+        );
+    });
+  });
+
+  it("displays post content from fixture", () => {
+    cy.get("[data-testid='avatar']")
+      .should("be.visible")
+      .find("p")
+      .should("have.text", "Kelly Slater");
     cy.get("[data-cy='post-title']")
       .should("be.visible")
       .should("contain", "Chasing Perfect Waves");
     cy.get("[data-cy='post-text']")
       .should("be.visible")
       .should("contain", "Behind the scenes of my latest surf trip to Tahiti.");
+    cy.get("[data-cy='post-details']")
+      .find("img")
+      .should("have.attr", "src", "/images/posts/1_wave.jpg");
   });
 
   it("displays comments from fixture", () => {
-    cy.wait("@getComments");
     cy.get("[data-cy='comments']").should("exist");
     cy.fixture("comments.json").then((comments) => {
       if (comments.length > 0) {

@@ -35,6 +35,7 @@ export default function Avatar({
   return (
     <>
       <div
+        data-testid="avatar"
         className={`flex flex-col items-center ${className}`}
         style={{ "--avatar-border": borderColor } as React.CSSProperties}
       >

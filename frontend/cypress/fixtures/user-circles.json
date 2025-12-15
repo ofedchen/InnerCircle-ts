@@ -2,31 +2,46 @@
   {
     "uc_id": 1,
     "uc_circle_tier": "Silver",
-    "uc_circle_id": 1,
-    "uc_user_id": "id-1"
+    "circle_id": 1,
+    "uc_user_id": "id-1",
+    "circle_slug": "kelly-slater",
+    "circle_name": "Kelly Slater",
+    "circle_avatar": "/images/athletes/kelly-slater.webp"
   },
   {
     "uc_id": 2,
     "uc_circle_tier": "Silver",
-    "uc_circle_id": 2,
-    "uc_user_id": "id-2"
+    "circle_id": 2,
+    "uc_user_id": "id-2",
+    "circle_slug": "john-john-florence",
+    "circle_name": "John John Florence",
+    "circle_avatar": "/images/athletes/john-john-florence.webp"
   },
   {
     "uc_id": 3,
     "uc_circle_tier": "Gold",
-    "uc_circle_id": 2,
-    "uc_user_id": "id-1"
+    "circle_id": 2,
+    "uc_user_id": "id-1",
+    "circle_slug": "john-john-florence",
+    "circle_name": "John John Florence",
+    "circle_avatar": "/images/athletes/john-john-florence.webp"
   },
   {
     "uc_id": 4,
     "uc_circle_tier": "Gold",
-    "uc_circle_id": 3,
-    "uc_user_id": "id-3"
+    "circle_id": 3,
+    "uc_user_id": "id-3",
+    "circle_slug": "shaun-white",
+    "circle_name": "Shaun White",
+    "circle_avatar": "/images/athletes/shaun-white.webp"
   },
   {
     "uc_id": 5,
     "uc_circle_tier": "Bronze",
-    "uc_circle_id": 1,
-    "uc_user_id": "id-3"
+    "circle_id": 1,
+    "uc_user_id": "id-3",
+    "circle_slug": "kelly-slater",
+    "circle_name": "Kelly Slater",
+    "circle_avatar": "/images/athletes/kelly-slater.webp"
   }
 ]

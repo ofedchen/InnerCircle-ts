@@ -143,7 +143,7 @@ export default function PostRoute() {
                 allowFullScreen
               ></iframe>
             ) : (
-              mediaProps.postImg && <img src={mediaProps.postImg} />
+              mediaProps.postImg && <img src={mediaProps.postImg} loading="lazy" />
             )}
           </div>
           <section data-cy="comments" className="pt-4">
