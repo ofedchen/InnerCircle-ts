@@ -1,0 +1,32 @@
+[
+  {
+    "uc_id": 1,
+    "uc_circle_tier": "Silver",
+    "uc_circle_id": 1,
+    "uc_user_id": "id-1"
+  },
+  {
+    "uc_id": 2,
+    "uc_circle_tier": "Silver",
+    "uc_circle_id": 2,
+    "uc_user_id": "id-2"
+  },
+  {
+    "uc_id": 3,
+    "uc_circle_tier": "Gold",
+    "uc_circle_id": 2,
+    "uc_user_id": "id-1"
+  },
+  {
+    "uc_id": 4,
+    "uc_circle_tier": "Gold",
+    "uc_circle_id": 3,
+    "uc_user_id": "id-3"
+  },
+  {
+    "uc_id": 5,
+    "uc_circle_tier": "Bronze",
+    "uc_circle_id": 1,
+    "uc_user_id": "id-3"
+  }
+]

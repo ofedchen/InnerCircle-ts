@@ -1,0 +1,38 @@
+[
+  {
+    "post_id": 1,
+    "post_title": "Chasing Perfect Waves",
+    "post_text": "Behind the scenes of my latest surf trip to Tahiti.",
+    "post_content": "/images/posts/1_wave.jpg",
+    "post_date": "2025-11-09 19:08:02.97216+01",
+    "post_author": 1,
+    "post_tier": "Bronze",
+    "circle_slug": "kelly-slater",
+    "circle_name": "Kelly Slater",
+    "circle_avatar": "/images/athletes/kelly-slater.webp"
+  },
+  {
+    "post_id": 2,
+    "post_title": "Pipeline Sessions",
+    "post_text": "Pipeline is not just about big waves—it is a test of concentration, resilience, and creativity. Each session pushes you to adapt to the ocean's unpredictability. Learning to read sets and position yourself properly is key. Surfing here is a blend of art and sport, and it keeps challenging me every day.",
+    "post_content": "JNaiiKoZqrQ",
+    "post_date": "2025-11-09 19:08:02.97216+01",
+    "post_author": 2,
+    "post_tier": "Silver",
+    "circle_slug": "john-john-florence",
+    "circle_name": "John John Florence",
+    "circle_avatar": "/images/athletes/john-john-florence.webp"
+  },
+  {
+    "post_id": 3,
+    "post_title": "Training Regimen",
+    "post_text": "Staying strong and ready for monster waves requires a mix of strength, endurance, and mental focus. Each session pushes the body and mind, preparing for unpredictable conditions. Proper nutrition, recovery, and visualization techniques are as important as time spent on the water. Surfing has taught me discipline, patience, and creativity that extend beyond the ocean.",
+    "post_content": null,
+    "post_date": " 2025-11-09 19:08:02.97216+01",
+    "post_author": 3,
+    "post_tier": "Gold",
+    "circle_slug": "shaun-white",
+    "circle_name": "Shaun White",
+    "circle_avatar": "/images/athletes/shaun-white.webp"
+  }
+]
