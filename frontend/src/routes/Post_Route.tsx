@@ -54,9 +54,11 @@ export default function PostRoute() {
   }, [userId, postDetails]);
 
   async function postComment() {
+    if (commentText.length < 1) return;
+
     const commentBody: CommentBody = {
       userId: userId,
-      commentText: commentText,
+      commentText: commentText.trim(),
       postId: Number(postId),
     };
 
@@ -143,7 +145,9 @@ export default function PostRoute() {
                 allowFullScreen
               ></iframe>
             ) : (
-              mediaProps.postImg && <img src={mediaProps.postImg} loading="lazy" />
+              mediaProps.postImg && (
+                <img src={mediaProps.postImg} loading="lazy" />
+              )
             )}
           </div>
           <section data-cy="comments" className="pt-4">
@@ -189,10 +193,12 @@ export default function PostRoute() {
                 <Button type="submit">Post comment</Button>
               </form>
             ) : (
-              <section data-cy="login-to-comment" className="text-center">
-                <p className="py-4">Log in to see the post and comment!</p>
-                <AuthModal modalType={"login"} />
-              </section>
+              !userId && (
+                <section data-cy="login-to-comment" className="text-center">
+                  <p className="py-4">Log in to see the post and comment!</p>
+                  <AuthModal modalType={"login"} />
+                </section>
+              )
             )}
           </section>
         </div>

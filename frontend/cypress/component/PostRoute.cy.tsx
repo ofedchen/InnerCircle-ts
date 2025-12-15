@@ -116,13 +116,14 @@ describe("<PostRoute />", () => {
     cy.get("[data-cy='add-comment']").find("button").click();
   });
 
-  it("displays the login button for the users who aren't logged in", () => {
+  it("displays the login button for the users who aren't logged in, blurred post", () => {
     localStorage.removeItem("userId");
     cy.get("[data-cy='login-to-comment']")
       .find("button")
       .should("contain", "LOG IN");
 
     cy.get("[data-cy='add-comment']").should("not.exist");
+    cy.get("[data-cy='post-details']").should("have.class", "blur-sm");
   });
 
   it("submits a new comment", () => {
@@ -160,5 +161,37 @@ describe("<PostRoute />", () => {
       .should("contain", commentBody.commentText);
 
     cy.get("[data-cy='add-comment']").find("input").should("have.value", "");
+  });
+
+  it("doesn't post an empty comment", () => {
+    cy.intercept("POST", `/api/comments`).as("postComment");
+
+    cy.get("[data-cy='add-comment']").find("button").click();
+    cy.get("@postComment.all").should("have.length", 0);
+  });
+
+  it("shows blurred content for users with insufficient tier", () => {
+    const goldPostId = 3;
+    cy.intercept("GET", `/api/posts/${goldPostId}`, {
+      fixture: "postRoute.json",
+    });
+
+    cy.intercept("GET", `/api/comments/${goldPostId}`, {
+      fixture: "comments.json",
+    });
+
+    cy.mount(
+      <UserProvider>
+        <MemoryRouter initialEntries={[`/feed/${goldPostId}`]}>
+          <Routes>
+            <Route path="/feed/:postId" element={<PostRoute />} />
+          </Routes>
+        </MemoryRouter>
+      </UserProvider>
+    );
+
+    cy.get("[data-cy='post-details']").should("have.class", "blur-sm");
+    cy.get("[data-cy='add-comment']").should("not.exist");
+    cy.get("[data-cy='login-to-comment']").should("not.exist");
   });
 });
