@@ -30,6 +30,7 @@ export default function Profile() {
 	const [newUserEmail, setNewUserEmail] = useState<string>("");
 	const [newPaymentMethod, setNewPaymentMethod] = useState<string>("");
 	const [hasChanges, setHasChanges] = useState<boolean>(false);
+	const [avatarKey, setAvatarKey] = useState<number>(Date.now());
 	const [open, setOpen] = useState(false);
 
 	const [myCircles, setMyCircles] = useState(null);
@@ -66,6 +67,17 @@ export default function Profile() {
 
 		setHasChanges(usernameChanged || emailChanged || paymentChanged);
 	}, [newUsername, newUserEmail, newPaymentMethod, userData]);
+
+	const handleAvatarChange = (newAvatarPath: string) => {
+		setUserData((prevData) => {
+			if (!prevData) return prevData;
+			return {
+				...prevData,
+				users_avatar: newAvatarPath,
+			};
+		});
+		setAvatarKey(Date.now());
+	};
 
 	async function handleSaveChanges() {
 		let updates: ProfileUpdatesProps = {};
@@ -131,13 +143,21 @@ export default function Profile() {
 			<div className="bg-(--purple-dark) min-h-screen">
 				<div
 					id="profile-hero"
-					className="flex flex-col self-start items-center pt-6 pb-6 px-2 gap-3 text-2xl font-black w-full bg-(--purple-main) text-(--orange-lighter)  text-center"
+					className="flex flex-col self-start items-center pt-6 pb-2 px-2  text-2xl font-black w-full bg-(--purple-main) text-(--orange-lighter)  text-center"
 				>
 					<h2> Welcome back </h2>
 					<h2>{userData?.users_name}!</h2>
 					<div id="avatarbox">
-						<img className="avatar-center" src="/avatar1.webp" />
-						<ChangeAvatar userId={userId} className="avatar-change" />
+						<Avatar
+							variant="large"
+							src={`${userData?.users_avatar}?t=${avatarKey}`}
+							className="avatar-center"
+						/>
+						<ChangeAvatar
+							userId={userId}
+							className="avatar-change"
+							onAvatarChange={handleAvatarChange}
+						/>
 					</div>
 				</div>
 

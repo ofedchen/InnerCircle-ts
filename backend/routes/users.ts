@@ -107,7 +107,6 @@ router.post(
 
 			const userName = userResult.rows[0].users_name || `user-${userId}`;
 			const safeUserName = String(userName).replace(/[^a-z0-9_\-]/gi, "_");
-			const ext = path.extname(file.originalname);
 			const newFilename = `${safeUserName}.webp`;
 			const newPath = path.join(uploadDir, newFilename);
 

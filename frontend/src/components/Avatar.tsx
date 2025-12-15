@@ -3,9 +3,9 @@ import type { Tier } from "../types.ts";
 
 type AvatarProps = {
 	src: string;
-	name: string;
+	name?: string;
 	className?: string;
-	tierColor: Tier | null;
+	tierColor?: Tier | null;
 	variant?: string;
 };
 
@@ -22,8 +22,10 @@ export default function Avatar({
 		Bronze: "#CD7F32",
 	} as const;
 
-	const borderColor = tierColor ? colorMap[tierColor] : "transparent";
+	const borderColor = tierColor ? colorMap[tierColor] : null;
+	const borderClass = borderColor ? "border-4" : "";
 	const textColor = name && tierColor ? colorMap[tierColor] : "transparent";
+	const shadowColor = tierColor ? colorMap[tierColor] : "var(--purple-darker)";
 
 	const avatarSize =
 		variant === "large"
@@ -34,17 +36,27 @@ export default function Avatar({
 		<>
 			<div
 				className={`flex flex-col items-center ${className}`}
-				style={{ "--avatar-border": borderColor } as React.CSSProperties}
+				style={
+					{
+						"--avatar-border": borderColor || "transparent",
+						"--avatar-shadow": shadowColor,
+						"--avatar-text": textColor,
+					} as React.CSSProperties
+				}
 			>
 				<img
 					src={src}
 					alt={name}
 					loading="lazy"
-					className={`rounded-full object-cover border-4 border-(--avatar-border) shadow-[4px_4px_8px_-3px_var(--orange-dark)] ${avatarSize}`}
+					className={`rounded-full object-cover ${borderClass} ${avatarSize}`}
+					style={{
+						borderColor: borderColor || undefined,
+						boxShadow: `4px 4px 8px -3px ${shadowColor}`,
+					}}
 				/>
 				<p
-					style={{ "--avatar-border": textColor } as React.CSSProperties}
-					className="text-center font-bold mt-2 text-sm text-(--avatar-border)"
+					style={{ color: textColor }}
+					className="text-center font-bold mt-2 text-sm"
 				>
 					{name}
 				</p>

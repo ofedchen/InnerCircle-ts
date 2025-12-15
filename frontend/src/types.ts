@@ -78,4 +78,5 @@ export type UserData = {
 	users_name: string;
 	users_email: string;
 	users_payment: string;
+	users_avatar: string;
 };
