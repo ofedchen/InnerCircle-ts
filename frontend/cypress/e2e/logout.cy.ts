@@ -5,17 +5,15 @@ context("Logout", () => {
 
   it("clears local storage userId", () => {
     cy.visit("/");
-    cy.window().then((window) => {
-      window.localStorage.setItem("userId", mockUserId);
-    });
+    localStorage.setItem("userId", mockUserId);
     cy.get("[data-cy='menu-icon']").find("button").click();
     cy.get("[data-cy='side-menu']")
       .find("button")
       .should("have.text", "LOG OUT")
       .click();
 
-    cy.window().then((window) => {
-      expect(window.localStorage.getItem("userId")).to.be.null;
+    cy.getAllLocalStorage().should(() => {
+      expect(localStorage.getItem("userId")).to.be.null;
     });
   });
 });
