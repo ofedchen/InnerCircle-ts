@@ -12,6 +12,7 @@
 		"types": ["node", "cypress"],
 		"noEmit": true,
 		"allowImportingTsExtensions": true,
+
 		// For nodejs:
 		// "lib": ["esnext"],
 		// "types": ["node"],

@@ -5,17 +5,17 @@ describe("ChangeAvatar.cy.jsx", () => {
 	const mockUsername = "sverker olofsson";
 
 	it("renders a button for the avatar change", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('[data-testid="change-avatar-btn"]').should("be.visible");
 	});
 
 	it("lets the user click the button to browse for files", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('[data-testid="change-avatar-btn"]').click();
 	});
 
 	it("checks so that the user doesnt upload something that isnt an image", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('input[type="file"]').selectFile(
 			{
 				contents: Cypress.Buffer.from("not an image content"),
@@ -32,7 +32,7 @@ describe("ChangeAvatar.cy.jsx", () => {
 	});
 
 	it("shows a message after image is uploaded", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 
 		cy.get('input[type="file"]').selectFile(
 			{
@@ -50,12 +50,12 @@ describe("ChangeAvatar.cy.jsx", () => {
 	});
 
 	it(" can't find save button before file is selected", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('[data-testid="save-avatar-btn"]').should("not.be.visible");
 	});
 
 	it("finds save button when file is selected", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('input[type="file"]').selectFile(
 			{
 				contents: Cypress.Buffer.from("fake image data"),
@@ -69,7 +69,7 @@ describe("ChangeAvatar.cy.jsx", () => {
 	});
 
 	it("renames file to username after upload", () => {
-		cy.mount(<ChangeAvatar />);
+		cy.mount(<ChangeAvatar userId={mockUserId} />);
 	});
 });
 

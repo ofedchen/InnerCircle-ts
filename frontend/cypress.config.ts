@@ -6,9 +6,9 @@ export default defineConfig({
 			framework: "react",
 			bundler: "vite",
 		},
-		specPattern: "src/**/*. cy.{js,jsx,ts,tsx}",
+		specPattern: "cypress/component/**/*.cy.{js,jsx,ts,tsx}",
 	},
 	e2e: {
-		baseUrl: "http://localhost:3000",
+		baseUrl: "http://localhost:5173",
 	},
 });
