@@ -43,7 +43,7 @@ context("Signup", () => {
   });
 
   it("can switch to login modal", () => {
-    cy.contains("log in", { matchCase: false }).click();
+    cy.get("[data-cy='switch-to-login']:visible").click();
     cy.get("[data-cy='login-container']:visible").should("exist");
     cy.get("[data-cy='sign-up-container']").should("not.be.visible");
   });
@@ -133,12 +133,40 @@ context("Signup", () => {
     cy.get("[data-cy='checkbox']:visible")
       .find("input[type='checkbox']")
       .check();
-    cy.get("[data-cy='sign-up-form']:visible")
-      .find("button")
-      .click();
+    cy.get("[data-cy='sign-up-form']:visible").find("button").click();
 
     cy.url().should("include", "/feed");
 
-    cy.request("DELETE", `/api/users/${newUser.email}`);
+    cy.getAllLocalStorage().then((result) => {
+      const userId = result[Cypress.config().baseUrl!]?.userId;
+      if (userId) {
+        cy.request("DELETE", `/api/users/${userId}`);
+      }
+    });
+  });
+
+  it("displays server error when email already exists", () => {
+    const existingUser = {
+      userName: "ExistingUser",
+      email: "greg@gregmail.com",
+      password: "Test1234%",
+    };
+
+    cy.get("[data-cy='sign-up-form']:visible input[name='userName']").type(
+      existingUser.userName
+    );
+    cy.get("[data-cy='sign-up-form']:visible input[name='email']").type(
+      existingUser.email
+    );
+    cy.get("[data-cy='sign-up-form']:visible input[name='password']").type(
+      existingUser.password
+    );
+    cy.get("[data-cy='repeat-pw']:visible").type(existingUser.password);
+    cy.get("[data-cy='checkbox']:visible")
+      .find("input[type='checkbox']")
+      .check();
+    cy.get("[data-cy='sign-up-form']:visible").find("button").click();
+
+    cy.get("[data-cy='error-response']:visible").should("be.visible");
   });
 });

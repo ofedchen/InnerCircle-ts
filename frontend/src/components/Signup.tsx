@@ -164,7 +164,11 @@ const Signup = (props: SignUpProps) => {
         }}
       >
         <Stack spacing={1}>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <p data-cy="error-response" className="text-red-500 text-center">
+              {error}
+            </p>
+          )}
           <FormControl error={!validName && !!userName && !userFocus}>
             <FormLabel>Name</FormLabel>
             <Input
@@ -268,6 +272,7 @@ const Signup = (props: SignUpProps) => {
             Sign up
           </Button>
           <p
+            data-cy="switch-to-login"
             className="underline py-4 cursor-pointer"
             onClick={handleSwitchToLogin}
           >

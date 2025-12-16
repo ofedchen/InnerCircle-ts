@@ -63,21 +63,24 @@ const Login = (props: LoginProps) => {
   };
 
   return (
-    <section className="bg-(--purple-dark) w-full text-(--orange-main) px-8 py-10">
+    <section
+      data-cy="login-container"
+      className="bg-(--purple-dark) w-full text-(--orange-main) px-8 py-10"
+    >
       <h2 className="text-2xl text-center">Log in</h2>
       <form
         className="bg-(--purple-dark) w-full text-(--orange-main) px-8 py-10"
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries()) as AuthFormData;
+          const formJson = Object.fromEntries(
+            formData.entries()
+          ) as AuthFormData;
           handleLogin(formJson);
         }}
       >
         <Stack spacing={1.2}>
-          {error && (
-            <p className="text-red-500 text-center">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <FormControl>
             <FormLabel>Email</FormLabel>
             <Input
