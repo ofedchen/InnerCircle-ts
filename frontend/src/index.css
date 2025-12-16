@@ -107,5 +107,62 @@
 
 #profile-hero {
 	background-color: var(--purple-main);
-	min-height: 300px;
+}
+
+#avatarbox {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 3fr 1fr;
+
+	max-width: 680px;
+}
+
+.avatar-center {
+	grid-column-start: 2;
+	grid-column-end: 5;
+	grid-row-start: 2;
+	grid-row-end: 3;
+	align-self: end;
+}
+
+.avatar-change {
+	grid-column-start: 4;
+	grid-column-end: 5;
+	grid-row-start: 2;
+	grid-row-end: 3;
+	width: 32px;
+	height: 32px;
+	background-color: var(--orange-dark);
+	border-radius: 50%;
+	justify-self: end;
+	align-self: end;
+	display: grid;
+	place-items: center;
+	cursor: pointer;
+	margin-bottom: 8px;
+}
+.avatar-change:hover {
+	background-color: var(--orange-darker);
+}
+.avatar-msg {
+	grid-column-start: 3;
+	grid-column-end: 5;
+	grid-row-start: 3;
+	grid-row-end: 4;
+	justify-self: end;
+	align-self: center;
+	margin-top: 8px;
+	min-height: 40px;
+	min-width: 130px;
+}
+
+.avatar-error {
+	font-size: small;
+	color: brown;
+	font-weight: 600;
+}
+.avatar-success {
+	font-size: small;
+	color: rgb(73, 221, 73);
+	font-weight: 600;
 }
