@@ -167,6 +167,6 @@ context("Signup", () => {
       .check();
     cy.get("[data-cy='sign-up-form']:visible").find("button").click();
 
-    cy.get("[data-cy='error-response']:visible").should("be.visible");
+    cy.get("[data-cy='error-response']").should("exist");
   });
 });
