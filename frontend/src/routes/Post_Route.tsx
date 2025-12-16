@@ -54,9 +54,11 @@ export default function PostRoute() {
   }, [userId, postDetails]);
 
   async function postComment() {
+    if (commentText.length < 1) return;
+
     const commentBody: CommentBody = {
       userId: userId,
-      commentText: commentText,
+      commentText: commentText.trim(),
       postId: Number(postId),
     };
 
@@ -97,7 +99,10 @@ export default function PostRoute() {
 
   return (
     <div className="wrapper-dark">
-      <article className="bg-(--purple-light) flex flex-col items-center px-2 py-2 mx-2 my-4 border border-gray-500 rounded-lg">
+      <article
+        data-cy="post"
+        className="bg-(--purple-light) flex flex-col items-center px-2 py-2 mx-2 my-4 border border-gray-500 rounded-lg"
+      >
         <div className="grid grid-cols-[1fr_2fr] grid-rows-2 items-center gap-x-8 pt-2 pb-2">
           <Link
             to={`/circle/${postDetails.post_author}/${postDetails.circle_slug}`}
@@ -110,7 +115,7 @@ export default function PostRoute() {
               tierColor={postDetails.post_tier}
             />
           </Link>
-          <h1 className="text-2xl font-semibold py-2">
+          <h1 data-cy="post-title" className="text-2xl font-semibold py-2">
             {postDetails.post_title}
           </h1>
           <h3 className="text-gray-200">
@@ -123,8 +128,13 @@ export default function PostRoute() {
         <div
           className={`py-4 px-2 bg-(--purple-white) border border-gray-500 rounded-lg`}
         >
-          <div className={`${isLockedPost ? "blur-sm" : ""}`}>
-            <p className="pb-4 px-2">{postDetails.post_text}</p>
+          <div
+            data-cy="post-details"
+            className={`${isLockedPost ? "blur-sm" : ""}`}
+          >
+            <p data-cy="post-text" className="pb-4 px-2">
+              {postDetails.post_text}
+            </p>
             {mediaProps.video ? (
               <iframe
                 className="w-full aspect-video rounded-t-md"
@@ -135,10 +145,12 @@ export default function PostRoute() {
                 allowFullScreen
               ></iframe>
             ) : (
-              mediaProps.postImg && <img src={mediaProps.postImg} />
+              mediaProps.postImg && (
+                <img src={mediaProps.postImg} loading="lazy" />
+              )
             )}
           </div>
-          <section className="pt-4">
+          <section data-cy="comments" className="pt-4">
             <Divider>
               <h3 className="font-semibold text-black text-lg">Comments: </h3>
             </Divider>
@@ -158,6 +170,7 @@ export default function PostRoute() {
             )}
             {!isLockedPost ? (
               <form
+                data-cy="add-comment"
                 className="py-4"
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -180,10 +193,12 @@ export default function PostRoute() {
                 <Button type="submit">Post comment</Button>
               </form>
             ) : (
-              <section className="text-center">
-                <p className="py-4">Log in to see the post and comment!</p>
-                <AuthModal modalType={"login"} />
-              </section>
+              !userId && (
+                <section data-cy="login-to-comment" className="text-center">
+                  <p className="py-4">Log in to see the post and comment!</p>
+                  <AuthModal modalType={"login"} />
+                </section>
+              )
             )}
           </section>
         </div>

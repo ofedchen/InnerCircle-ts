@@ -17,6 +17,9 @@
 import './commands.ts'
 
 import { mount } from 'cypress/react'
+import '../../src/index.css';
+import '../../src/App.css';
+import '../../src/theme.js'
 
 // Extend Cypress' Chainable interface to include 'mount'
 declare global {

@@ -20,7 +20,7 @@ export default function Comment({ date, author, commentText }: CommentProps) {
 
   return (
     <>
-      <div className="comment-wrapper px-4 py-2 grid grid-cols-[1fr_3fr_6fr] items-center gap-2 border border-gray-500 rounded-lg my-2">
+      <div data-cy="comment" className="comment-wrapper px-4 py-2 grid grid-cols-[1fr_3fr_6fr] items-center gap-2 border border-gray-500 rounded-lg my-2">
         <Avatar data-cy="comment-avatar">{initials}</Avatar>
         <h3 className="font-semibold" data-cy="comment-author">
           {author.trim()}
