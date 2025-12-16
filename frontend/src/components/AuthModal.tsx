@@ -102,7 +102,7 @@ const AuthModal = ({
   };
 
   return (
-    <section>
+    <section data-cy="auth-modal-buttons">
       {modalType === "login" && (
         <Button
           onClick={toggleLoginDrawer(true)}
