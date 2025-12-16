@@ -4,18 +4,30 @@ describe("ChangeAvatar.cy.jsx", () => {
 	const mockUserId = "2";
 	const mockUsername = "sverker olofsson";
 
+	beforeEach(() => {
+		cy.mount(
+			<div
+				style={{
+					backgroundColor: "#504785",
+					paddingTop: "200px",
+					paddingRight: "220px",
+					height: "100vh",
+				}}
+			>
+				<ChangeAvatar userId={mockUserId} />
+			</div>
+		);
+	});
+
 	it("renders a button for the avatar change", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('[data-testid="change-avatar-btn"]').should("be.visible");
 	});
 
 	it("lets the user click the button to browse for files", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('[data-testid="change-avatar-btn"]').click();
 	});
 
 	it("checks so that the user doesnt upload something that isnt an image", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('input[type="file"]').selectFile(
 			{
 				contents: Cypress.Buffer.from("not an image content"),
@@ -27,35 +39,44 @@ describe("ChangeAvatar.cy.jsx", () => {
 
 		cy.get('[data-testid="change-avatar-error-msg"]').should(
 			"contain.text",
-			"you need to upload an image"
+			"Not a valid image, please try another file."
 		);
 	});
 
 	it("shows a message after image is uploaded", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
+		const mockAvatarPath = "/avatars/sverker_olofsson.jpg";
+		cy.intercept("POST", "/api/users/2/avatar", {
+			statusCode: 200,
+			body: {
+				success: true,
+				avatarPath: mockAvatarPath,
+				message: "Avatar uploaded successfully",
+			},
+		}).as("uploadAvatar");
 
 		cy.get('input[type="file"]').selectFile(
 			{
 				contents: Cypress.Buffer.from("fake image data"),
-				fileName: "avatar.jpg",
+				fileName: "DSC3210.jpg",
 				mimeType: "image/jpeg",
 			},
 			{ force: true }
 		);
 
+		cy.get('[data-testid="save-avatar-btn"]').click();
+		cy.wait("@uploadAvatar");
+
 		cy.get('[data-testid="change-avatar-success-msg"]').should(
 			"contain.text",
-			"you're avatar has been changed"
+			"Your avatar is changed!"
 		);
 	});
 
 	it(" can't find save button before file is selected", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
-		cy.get('[data-testid="save-avatar-btn"]').should("not.be.visible");
+		cy.get('[data-testid="save-avatar-btn"]').should("not.exist");
 	});
 
 	it("finds save button when file is selected", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
 		cy.get('input[type="file"]').selectFile(
 			{
 				contents: Cypress.Buffer.from("fake image data"),
@@ -65,23 +86,35 @@ describe("ChangeAvatar.cy.jsx", () => {
 			{ force: true }
 		);
 
-		cy.get('[data-testid="save-avatar-btn"]').should("be.visable");
+		cy.get('[data-testid="save-avatar-btn"]').should("exist");
 	});
 
 	it("renames file to username after upload", () => {
-		cy.mount(<ChangeAvatar userId={mockUserId} />);
+		const mockAvatarPath = "/avatars/sverker_olofsson.jpg";
+		cy.intercept("POST", "/api/users/2/avatar", {
+			statusCode: 200,
+			body: {
+				success: true,
+				avatarPath: mockAvatarPath,
+				message: "Avatar uploaded successfully",
+			},
+		}).as("uploadAvatar");
+
+		cy.get('input[type="file"]').selectFile(
+			{
+				contents: Cypress.Buffer.from("fake image data"),
+				fileName: "DSC3210.jpg",
+				mimeType: "image/jpeg",
+			},
+			{ force: true }
+		);
+
+		cy.get('[data-testid="save-avatar-btn"]').click();
+		cy.wait("@uploadAvatar").then((interception) => {
+			expect(interception.response?.statusCode).to.equal(200);
+			expect(interception.response?.body.avatarPath).to.include(
+				"sverker_olofsson"
+			);
+		});
 	});
 });
-
-/* 
-psuedo code for tdd ChangeAvatar. 
-
-button with symbol + is on profilepage, it has test-id=”change-avatar-btn”. click()
-select file, upload(). 
-multer will change name on file  so that is smiliar to circle-slug but add suffix number. 
-multer removes the old avtarfile. 
-imgsrc in avatar will be set to use the new file name. 
-new avatar will be dislpayed in profile page. 
-
-expect 
-cy. image (circle_avatar) toBeVisible on page.  */
