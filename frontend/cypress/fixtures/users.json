@@ -1,0 +1,26 @@
+[
+  {
+    "users_id": "id-1",
+    "users_email": "test1@test.com",
+    "users_pass": "hashed-pass",
+    "users_name": "Test",
+    "users_avatar": "avatar1.png",
+    "users_payment": "VISA"
+  },
+  {
+    "users_id": "id-2",
+    "users_email": "test2@test.com",
+    "users_pass": "hashed-pass",
+    "users_name": "Noob",
+    "users_avatar": "customavatar.webp",
+    "users_payment": "MASTERCARD"
+  },
+  {
+    "users_id": "id-3",
+    "users_email": "test3@test.com",
+    "users_pass": "hashed-pass",
+    "users_name": "Tester",
+    "users_avatar": "avatar1.png",
+    "users_payment": "PAYPAL"
+  }
+]

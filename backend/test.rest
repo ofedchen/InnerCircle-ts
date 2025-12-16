@@ -11,20 +11,18 @@ POST http://localhost:3000/api/signup
 Content-Type: application/json
 
 {
-    "userName": "lill H",
-    "email": "adbc@example.com",
-    "password": "testpassword123"
+    "userName": "noobie",
+    "email": "noob@nejla.com",
+    "password": "Pass1234%"
 }
 
 ### all posts
 GET http://localhost:3000/api/posts
 
-
 ### specific post
-GET http://localhost:3000/api/posts/11
+GET http://localhost:3000/api/posts/67
 
 ### athletes in category
-
 GET http://localhost:3000/api/categories/Snow
 
 ### specific athlete profile details
@@ -45,8 +43,6 @@ GET http://localhost:3000/api/user-circles/9cd9860b-8e72-4c36-abd9-a8ab8a9b7e0e
 ### feed for the user
 GET http://localhost:3000/api/user-circles/feed/ab71881f-dc4f-4481-a689-55e506679a5e
 
-
-
 ### joining a circle
 POST http://localhost:3000/api/user-circles/
 Content-Type: application/json
@@ -58,11 +54,9 @@ Content-Type: application/json
 }
 
 ### leaving a circle
-
 DELETE http://localhost:3000/api/user-circles/8
 
 ### show all users
-
 GET http://localhost:3000/api/users/
 
 ### show user
@@ -90,3 +84,15 @@ Content-Type: application/json
 ### deleting a profile
 DELETE http://localhost:3000/api/users/a59b9292-8cf4-4dc2-b550-9ee89e9a3d2b
 
+### post comments
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "userId": "1f778f1c-b41e-4cd7-aca8-80fc0895e6e8",
+    "commentText": "Man that's some dope tricks. What's the location?",
+    "postId": 82
+}
+
+### all comments
+GET http://localhost:3000/api/comments/

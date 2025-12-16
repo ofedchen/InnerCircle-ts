@@ -39,7 +39,7 @@ async function checkPassword(
 
 router.post(
   "/signup",
-  async (req: Request<void, void, SignupBody>, res: Response) => {
+  async (req: Request<{}, {}, SignupBody>, res: Response) => {
     const { userName, email, password } = req.body;
 
     if (!userName || !email || !password) {
@@ -59,12 +59,14 @@ router.post(
 
       const result = await db.query(
         "INSERT INTO users (users_name, users_email, users_pass, users_payment) VALUES($1, $2, $3, $4) RETURNING users_id, users_name, users_email",
-        [userName, email, hashedPassword, "VISA"]
+        [userName.trim(), email, hashedPassword, "VISA"]
       );
+
+      const newUser = result.rows[0];
 
       res.status(201).json({
         message: "User created successfully",
-        user: result.rows[0],
+        user: newUser,
       });
     } catch (err) {
       console.error("Signup error:", err);
