@@ -14,11 +14,19 @@ const date = comment.date.toLocaleString("fr-FR", {
 
 beforeEach(function () {
   cy.mount(
-    <Comment
-      date={comment.date}
-      author={comment.author}
-      commentText={comment.commentText}
-    />
+    <div
+      style={{
+        backgroundColor: "#504785",
+        paddingTop: "20px",
+        height: "100vh",
+      }}
+    >
+      <Comment
+        date={comment.date}
+        author={comment.author}
+        commentText={comment.commentText}
+      />
+    </div>
   );
 });
 
@@ -67,7 +75,7 @@ describe("Comment component", () => {
       .should("have.text", "BF");
   });
 
-    it("shows correct user initials if the username contains spaces in the beginning", function () {
+  it("shows correct user initials if the username contains spaces in the beginning", function () {
     cy.get("[data-cy='comment-avatar']")
       .should("exist")
       .should("have.text", "BF");
