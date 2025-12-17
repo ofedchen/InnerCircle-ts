@@ -1,41 +1,29 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
+import { Router } from "express";
+import * as db from "../db/index.js";
+import fs from "fs";
+import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "node:url";
+import { customAlphabet } from "nanoid";
+const router = Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.resolve(__dirname, "../../frontend/public/images/users");
+const nanoid = customAlphabet("0123456789", 4);
+const storage = multer.diskStorage({
+    destination: (req, _file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (_req, file, cb) => {
+        const id = Number(nanoid());
+        const timestamp = Date.now();
+        const ext = path.extname(file.originalname) || "";
+        const base = path.basename(file.originalname, ext).replace(/\s+/g, "_");
+        const safe = `${id}-${timestamp}-${base}${ext}`;
+        cb(null, safe);
+    },
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const db = __importStar(require("../db/index.js"));
-const router = (0, express_1.Router)();
+const upload = multer({ storage });
 router.get("/", async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM users");
@@ -62,6 +50,60 @@ router.get("/:users_id", async (req, res) => {
         const message = err instanceof Error ? err.message : String(err);
         res.status(500).json({
             error: "Failed to fetch the user",
+            message,
+        });
+    }
+});
+router.post("/:users_id/avatar", upload.single("avatar"), async (req, res) => {
+    try {
+        if (!req.file) {
+            console.log("Avatar uploaded without file in request");
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+        const file = req.file;
+        const userId = req.params.users_id;
+        console.log("Avatar upload: multer saved file at: ", file.path);
+        console.log("Configured the uploadDir:  ", uploadDir);
+        const userResult = await db.query("SELECT users_name FROM users WHERE users_id = $1", [userId]);
+        if (userResult.rows.length === 0) {
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+            return res.status(404).json({ error: "User not found" });
+        }
+        const userName = userResult.rows[0].users_name || `user-${userId}`;
+        const safeUserName = String(userName).replace(/[^a-z0-9_\-]/gi, "_");
+        const newFilename = `${safeUserName}.webp`;
+        const newPath = path.join(uploadDir, newFilename);
+        try {
+            fs.renameSync(file.path, newPath);
+            const avatarPath = `images/users/${newFilename}`;
+            const result = await db.query("UPDATE users SET users_avatar = $1 WHERE users_id = $2 RETURNING *", [avatarPath, userId]);
+            console.log("Avatar saved for user", userId, "->", avatarPath);
+            res.status(200).json({
+                message: "Avatar uploaded successfully",
+                user: result.rows[0],
+                avatarPath,
+            });
+        }
+        catch (renameErr) {
+            console.error("Error renaming/moving uploaded file:", renameErr);
+            if (fs.existsSync(file.path)) {
+                try {
+                    fs.unlinkSync(file.path);
+                }
+                catch (e) {
+                    console.error("Failed to unlink temp upload after rename error:", e);
+                }
+            }
+            res.status(500).json({ error: "Error processing uploaded file" });
+        }
+    }
+    catch (err) {
+        console.error("Error uploading avatar:", err);
+        const message = err instanceof Error ? err.message : String(err);
+        res.status(500).json({
+            error: "Failed to upload avatar",
             message,
         });
     }
@@ -127,4 +169,4 @@ router.delete("/:users_id", async (req, res) => {
         });
     }
 });
-exports.default = router;
+export default router;

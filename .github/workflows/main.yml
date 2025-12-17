@@ -18,11 +18,18 @@ jobs:
         working-directory: backend
         run: npm ci
       
+      - name: Build backend
+        working-directory: backend
+        run: npm run build
+      
       - name: Start backend server
         working-directory: backend
         run: npm start &
         env:
           PORT: 3000
+      
+      - name: Wait for backend
+        run: npx wait-on http://localhost:3000
       
       - name: Cypress run E2E tests
         uses: cypress-io/github-action@v6
@@ -30,7 +37,7 @@ jobs:
           working-directory: frontend
           build: npm run build
           start: npm start
-          wait-on: 'http://localhost:5173, http://localhost:3000'
+          wait-on: 'http://localhost:5173'
       
       - name: Cypress Component Tests
         uses: cypress-io/github-action@v6

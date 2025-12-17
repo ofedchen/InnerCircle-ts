@@ -1,29 +1,27 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const auth_1 = __importDefault(require("./routes/auth"));
-const category_1 = __importDefault(require("./routes/category"));
-const circle_1 = __importDefault(require("./routes/circle"));
-const post_1 = __importDefault(require("./routes/post"));
-const userCircle_1 = __importDefault(require("./routes/userCircle"));
-const users_1 = __importDefault(require("./routes/users"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
+import express from "express";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.js";
+import categoryRoutes from "./routes/category.js";
+import circleRoutes from "./routes/circle.js";
+import postRoutes from "./routes/post.js";
+import userCircleRoutes from "./routes/userCircle.js";
+import userRoutes from "./routes/users.js";
+import commentRoutes from "./routes/comment.js";
+dotenv.config();
+const app = express();
 const port = process.env.PORT || 3000;
-app.use(express_1.default.json());
-app.get('/', (req, res) => {
-    res.json({ message: 'Inner Circle API is running!' });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.get("/", (req, res) => {
+    res.json({ message: "Inner Circle API is running!" });
 });
-app.use('/api', auth_1.default);
-app.use('/api/categories', category_1.default);
-app.use('/api/circles', circle_1.default);
-app.use('/api/posts', post_1.default);
-app.use('/api/user-circles', userCircle_1.default);
-app.use('/api/users', users_1.default);
+app.use("/api", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/circles", circleRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/user-circles", userCircleRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/comments", commentRoutes);
 app.listen(port, () => {
     console.log(`Redo på den externa servern på: ${port}`);
 });
