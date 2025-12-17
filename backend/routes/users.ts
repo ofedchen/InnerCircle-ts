@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import * as db from "../db/index.js";
 import fs from "fs";
-import cors from "cors";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "node:url";

@@ -31,21 +31,11 @@ const AuthModal = ({
   handleCancel,
   buttonText,
 }: AuthProps & MembershipProps) => {
-  const [loginOpen, setLoginOpen] = useState<boolean>(false);
-  const [signUpOpen, setSignupOpen] = useState<boolean>(false);
-  const [joinOpen, setJoinOpen] = useState<boolean>(false);
+  const [activeModal, setActiveModal] = useState<ModalType | null>(null);
 
-  // const hasMembershipProps =
-  //   circleName &&
-  //   circleId &&
-  //   userId &&
-  //   userTier !== undefined &&
-  //   ucId !== undefined &&
-  //   handleJoin &&
-  //   handleCancel;
-
-  const toggleLoginDrawer =
-    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  const toggleModal =
+    (type: ModalType | null) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
         event?.type === "keydown" &&
         "key" in event &&
@@ -53,140 +43,103 @@ const AuthModal = ({
       ) {
         return;
       }
-
-      setLoginOpen(inOpen);
+      setActiveModal(type);
     };
 
-  const toggleSignupDrawer =
-    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event?.type === "keydown" &&
-        "key" in event &&
-        (event.key === "Tab" || event.key === "Shift")
-      ) {
-        return;
-      }
-
-      setSignupOpen(inOpen);
-    };
-
-  const toggleJoinDrawer =
-    (inOpen: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event?.type === "keydown" &&
-        "key" in event &&
-        (event.key === "Tab" || event.key === "Shift")
-      ) {
-        return;
-      }
-
-      setJoinOpen(inOpen);
-    };
-
-  const closeSignup = () => setSignupOpen(false);
-  const closeLogin = () => setLoginOpen(false);
-
-  const switchToSignup = () => {
-    setLoginOpen(false);
-    setSignupOpen(true);
-  };
-
-  const switchToLogin = () => {
-    setSignupOpen(false);
-    setLoginOpen(true);
-  };
-
-  const switchToJoin = () => {
-    setLoginOpen(false);
-    setJoinOpen(true);
-  };
+  const closeModal = () => setActiveModal(null);
+  const switchToSignup = () => setActiveModal("signup");
+  const switchToLogin = () => setActiveModal("login");
+  const switchToJoin = () => setActiveModal("join");
 
   return (
-    <section data-cy="auth-modal-buttons">
-      {modalType === "login" && (
-        <Button
-          onClick={toggleLoginDrawer(true)}
-          variant="outlined"
-          color="primary"
-        >
-          LOG IN
-        </Button>
-      )}
-      {modalType === "signup" && (
-        <Button
-          onClick={toggleSignupDrawer(true)}
-          variant="solid"
-          color="primary"
-        >
-          SIGN UP
-        </Button>
-      )}
-      {modalType === "join" && (
-        <Button
-          onClick={userId ? toggleJoinDrawer(true) : toggleSignupDrawer(true)}
-          variant="solid"
-          color="neutral"
-        >
-          {buttonText ? buttonText : "STEP INSIDE"}
-        </Button>
-      )}
-      {modalType === "manage" && (
-        <Button
-          onClick={toggleJoinDrawer(true)}
-          variant="outlined"
-          color="primary"
-        >
-          MANAGE MEMBERSHIP
-        </Button>
-      )}
-      <section>
-        <Drawer
-          anchor="bottom"
-          onClose={toggleLoginDrawer(false)}
-          open={loginOpen}
-          size="md"
-        >
-          <Login
-            toggleClose={closeLogin}
-            toggleSignup={switchToSignup}
-            toggleJoin={switchToJoin}
-            modalType={modalType}
-          />
-        </Drawer>
-        <Drawer
-          anchor="bottom"
-          onClose={toggleSignupDrawer(false)}
-          open={signUpOpen}
-          size="lg"
-        >
-          <Signup
-            toggleClose={closeSignup}
-            toggleLogin={switchToLogin}
-            toggleJoin={switchToJoin}
-            modalType={modalType}
-          />
-        </Drawer>
-        {(modalType === "join" || modalType === "manage") && (
-          <Drawer
-            anchor="bottom"
-            onClose={toggleJoinDrawer(false)}
-            open={joinOpen}
-            size={modalType === "join" ? "lg" : "sm"}
+    <>
+      <section data-cy="auth-modal-buttons">
+        {modalType === "login" && (
+          <Button
+            onClick={toggleModal("login")}
+            variant="outlined"
+            color="primary"
           >
-            <JoinCircle
-              circleName={circleName}
-              circleId={circleId}
-              modalType={modalType}
-              handleMembership={handleJoin}
-              cancelMembership={handleCancel}
-              userId={userId}
-              userTier={userTier}
-              ucId={ucId}
-            />
-          </Drawer>
+            LOG IN
+          </Button>
+        )}
+        {modalType === "signup" && (
+          <Button
+            onClick={toggleModal("signup")}
+            variant="solid"
+            color="primary"
+          >
+            SIGN UP
+          </Button>
+        )}
+        {modalType === "join" && (
+          <Button
+            onClick={userId ? toggleModal("join") : toggleModal("signup")}
+            variant="solid"
+            color="neutral"
+          >
+            {buttonText ? buttonText : "STEP INSIDE"}
+          </Button>
+        )}
+        {modalType === "manage" && (
+          <Button
+            onClick={toggleModal("join")}
+            variant="outlined"
+            color="primary"
+          >
+            MANAGE MEMBERSHIP
+          </Button>
         )}
       </section>
-    </section>
+
+      <Drawer
+        anchor="bottom"
+        onClose={toggleModal(null)}
+        open={activeModal === "login"}
+        size="md"
+      >
+        <Login
+          toggleClose={closeModal}
+          toggleSignup={switchToSignup}
+          toggleJoin={switchToJoin}
+          modalType={modalType}
+        />
+      </Drawer>
+
+      <Drawer
+        anchor="bottom"
+        onClose={toggleModal(null)}
+        open={activeModal === "signup"}
+        size="lg"
+      >
+        <Signup
+          toggleClose={closeModal}
+          toggleLogin={switchToLogin}
+          toggleJoin={switchToJoin}
+          modalType={modalType}
+        />
+      </Drawer>
+
+      {(modalType === "join" || modalType === "manage") && (
+        <Drawer
+          anchor="bottom"
+          onClose={toggleModal(null)}
+          open={activeModal === "join"}
+          size={modalType === "join" ? "lg" : "sm"}
+        >
+          <JoinCircle
+            circleName={circleName}
+            circleId={circleId}
+            modalType={modalType}
+            handleMembership={handleJoin}
+            cancelMembership={handleCancel}
+            userId={userId}
+            userTier={userTier}
+            ucId={ucId}
+          />
+        </Drawer>
+      )}
+    </>
   );
 };
 

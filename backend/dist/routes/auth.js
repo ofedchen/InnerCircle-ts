@@ -1,48 +1,10 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const argon2_1 = __importDefault(require("argon2"));
-const express_1 = require("express");
-const db = __importStar(require("../db/index"));
-const router = (0, express_1.Router)();
+import argon2 from "argon2";
+import { Router } from "express";
+import * as db from "../db/index.js";
+const router = Router();
 async function hashPassword(password) {
     try {
-        const hash = await argon2_1.default.hash(password);
+        const hash = await argon2.hash(password);
         return hash;
     }
     catch (err) {
@@ -51,7 +13,7 @@ async function hashPassword(password) {
 }
 async function checkPassword(hashedPassword, password) {
     try {
-        const match = await argon2_1.default.verify(hashedPassword, password);
+        const match = await argon2.verify(hashedPassword, password);
         return match;
     }
     catch (err) {
@@ -70,10 +32,11 @@ router.post("/signup", async (req, res) => {
             return res.status(409).json({ error: "Email already exists" });
         }
         const hashedPassword = await hashPassword(password);
-        const result = await db.query("INSERT INTO users (users_name, users_email, users_pass, users_payment) VALUES($1, $2, $3, $4) RETURNING users_id, users_name, users_email", [userName, email, hashedPassword, "VISA"]);
+        const result = await db.query("INSERT INTO users (users_name, users_email, users_pass, users_payment) VALUES($1, $2, $3, $4) RETURNING users_id, users_name, users_email", [userName.trim(), email, hashedPassword, "VISA"]);
+        const newUser = result.rows[0];
         res.status(201).json({
             message: "User created successfully",
-            user: result.rows[0],
+            user: newUser,
         });
     }
     catch (err) {
@@ -110,4 +73,4 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ error: "Login failed" });
     }
 });
-exports.default = router;
+export default router;

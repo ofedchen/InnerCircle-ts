@@ -84,7 +84,6 @@ export default function CirclePage() {
       <section className="px-6 py-8 font-kanit flex flex-col items-center">
         <Avatar
           src={circleAvatar}
-          slug={circleSlug}
           variant="large"
           tierColor={userTier ? userTier : null}
         />
@@ -96,7 +95,7 @@ export default function CirclePage() {
         </p>
         <p className="text-base text-(--orange-white) py-6">{circleBio}</p>
         {!isMember ? (
-          <div className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
+          <div data-cy="join-the-circle" className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
             <h2 className="text-lg text-(--purple-dark) pb-6">
               Become a part of {circleName} circle to access the exclusive
               content
@@ -110,7 +109,7 @@ export default function CirclePage() {
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
+          <div data-cy="membership" className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
             <h2 className="text-lg text-(--purple-dark)">
               You are a member of {circleName} circle
             </h2>

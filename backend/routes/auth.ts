@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 import { Router, Request, Response } from "express";
-import * as db from "../db/index";
+import * as db from "../db/index.js";
 
 const router = Router();
 
