@@ -69,6 +69,7 @@ const Login = (props: LoginProps) => {
     >
       <h2 className="text-2xl text-center">Log in</h2>
       <form
+        data-cy="login-form"
         className="bg-(--purple-dark) w-full text-(--orange-main) px-8 py-10"
         onSubmit={(event) => {
           event.preventDefault();
