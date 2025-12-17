@@ -75,7 +75,7 @@ describe("<PostRoute />", () => {
 	});
 
 	it("displays post content from fixture", () => {
-		cy.get("[data-testid='avatar']")
+		cy.get("[data-cy='avatar']")
 			.should("be.visible")
 			.find("p")
 			.should("have.text", "Kelly Slater");
