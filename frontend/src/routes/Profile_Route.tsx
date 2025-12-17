@@ -179,6 +179,7 @@ export default function Profile() {
 								}}
 							>
 								<AccordionSummary
+									data-cy="acc-details-button"
 									sx={{
 										color: "var(--orange-main)",
 										backgroundColor: "var(--purple-dark)",
@@ -216,6 +217,7 @@ export default function Profile() {
 								}}
 							>
 								<AccordionSummary
+									data-cy="acc-payment-button"
 									sx={{
 										color: "var(--orange-main)",
 										backgroundColor: "var(--purple-dark)",
@@ -246,6 +248,7 @@ export default function Profile() {
 								}}
 							>
 								<AccordionSummary
+									data-cy="acc-delete-button"
 									sx={{
 										color: "var(--orange-main)",
 										backgroundColor: "var(--purple-dark)",
@@ -300,6 +303,7 @@ export default function Profile() {
 										onClick={handleSaveChanges}
 										color="neutral"
 										variant="outlined"
+										data-cy="profile-save-button"
 									>
 										Save Changes
 									</Button>
