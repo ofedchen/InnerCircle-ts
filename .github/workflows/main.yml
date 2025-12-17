@@ -8,15 +8,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+      
+      - name: Start backend server
+        working-directory: backend
+        run: npm start &
+        env:
+          PORT: 3000
+      
       - name: Cypress run E2E tests
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
           build: npm run build
           start: npm start
-          wait-on: 'http://localhost:5173'
+          wait-on: 'http://localhost:5173, http://localhost:3000'
+      
       - name: Cypress Component Tests
         uses: cypress-io/github-action@v6
         with:
