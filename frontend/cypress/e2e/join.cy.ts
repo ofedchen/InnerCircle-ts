@@ -8,6 +8,16 @@ context("Join the circle or manage subscription", () => {
   };
 
   beforeEach(() => {
+    cy.clearLocalStorage(); 
+    cy.request("GET", `/api/user-circles/${existingUser.userId}`).then(
+      (response) => {
+        const userCircle = response.body.find((uc: any) => uc.circle_id === 5);
+        if (userCircle && userCircle.uc_id) {
+          cy.request("DELETE", `/api/user-circles/${userCircle.uc_id}`);
+        }
+      }
+    );
+
     cy.visit("/circle/5/candide-thovex");
   });
 
@@ -48,14 +58,6 @@ context("Join the circle or manage subscription", () => {
   });
 
   it("successfully joins the logged in user who was not yet a member", () => {
-    cy.request("GET", `/api/user-circles/${existingUser.userId}`).then(
-      (response) => {
-        if (response.body && response.body.uc_id) {
-          cy.request("DELETE", `/api/user-circles/${response.body.uc_id}`);
-        }
-      }
-    );
-
     localStorage.setItem("userId", existingUser.userId);
 
     cy.get("[data-cy='join-the-circle']")
@@ -83,6 +85,7 @@ context("Join the circle or manage subscription", () => {
     });
 
     localStorage.setItem("userId", existingUser.userId);
+    cy.reload();
 
     cy.get("[data-cy='membership']").children().last().find("button").click();
     cy.get("[data-cy='manage-subscription']:visible")
@@ -93,7 +96,6 @@ context("Join the circle or manage subscription", () => {
       .find("button")
       .contains("Cancel")
       .click();
-    cy.get("body").type("{esc}");
 
     cy.get("[data-cy='membership']").should("exist");
   });
@@ -106,6 +108,7 @@ context("Join the circle or manage subscription", () => {
     });
 
     localStorage.setItem("userId", existingUser.userId);
+    cy.reload();
 
     cy.get("[data-cy='membership']").children().last().find("button").click();
     cy.get("[data-cy='manage-subscription']:visible")
@@ -117,6 +120,6 @@ context("Join the circle or manage subscription", () => {
       .contains("Leave circle")
       .click();
 
-    cy.get("[data-cy='membership']").should("not.exist");
+    cy.get("[data-cy='join-the-circle']").should("exist");
   });
 });
