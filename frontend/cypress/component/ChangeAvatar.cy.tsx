@@ -2,7 +2,6 @@ import ChangeAvatar from "../../src/components/ChangeAvatar.tsx";
 
 describe("ChangeAvatar.cy.jsx", () => {
 	const mockUserId = "2";
-	const mockUsername = "sverker olofsson";
 
 	beforeEach(() => {
 		cy.mount(

@@ -16,25 +16,26 @@ export default function Avatar({
 	variant,
 	className,
 }: AvatarProps) {
-  const colorMap = {
-    Gold: "#D4AF37",
-    Silver: "#C0C0C0",
-    Bronze: "#CD7F32",
-  } as const;
+	const colorMap = {
+		Gold: "#D4AF37",
+		Silver: "#C0C0C0",
+		Bronze: "#CD7F32",
+	} as const;
 
 	const borderColor = tierColor ? colorMap[tierColor] : null;
 	const borderClass = borderColor ? "border-4" : "";
 	const textColor = name && tierColor ? colorMap[tierColor] : "transparent";
 	const shadowColor = tierColor ? colorMap[tierColor] : "var(--purple-darker)";
 
-  const avatarSize =
-    variant === "large"
-      ? "w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48"
-      : "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24";
+	const avatarSize =
+		variant === "large"
+			? "w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48"
+			: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24";
 
 	return (
 		<>
-			<div data-testid="avatar"
+			<div
+				data-cy="avatar"
 				className={`flex flex-col items-center ${className}`}
 				style={
 					{
@@ -46,6 +47,7 @@ export default function Avatar({
 			>
 				<img
 					src={src}
+					data-cy="avatar-img"
 					alt={name}
 					loading="lazy"
 					className={`rounded-full object-cover ${borderClass} ${avatarSize}`}
