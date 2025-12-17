@@ -100,4 +100,23 @@ router.post(
   }
 );
 
+router.delete(
+  "/:users_id",
+  async (req: Request<{ users_id: string }>, res: Response) => {
+    try {
+      const result = await db.query("DELETE FROM comment WHERE comment_author = $1", [
+        req.params.users_id,
+      ]);
+      res.status(200).json({ message: "User comments deleted!" });
+    } catch (err: unknown) {
+      console.error("Error deleting the user comments: ", err);
+      const message = err instanceof Error ? err.message : String(err);
+      res.status(500).json({
+        error: "Failed to delete the user comments",
+        message,
+      });
+    }
+  }
+);
+
 export default router;
