@@ -96,3 +96,6 @@ Content-Type: application/json
 
 ### all comments
 GET http://localhost:3000/api/comments/
+
+### delete comment
+DELETE http://localhost:3000/api/comments/cc626854-6f26-452d-8ce5-a987bf9827fa

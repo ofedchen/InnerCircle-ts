@@ -13,7 +13,18 @@ describe("template spec", () => {
       }
     });
 
-    cy.request("DELETE", `http://localhost:3000/api/comments/${testUserId}`);
+    cy.request("GET", `http://localhost:3000/api/comments`).then((response) => {
+      const userComments = response.body.filter(
+        (c: any) => c.comment_author === testUserId
+      );
+      console.log(userComments);
+      if (userComments.length > 0) {
+        cy.request(
+          "DELETE",
+          `http://localhost:3000/api/comments/${testUserId}`
+        );
+      }
+    });
   });
 
   it("Log in, join the circle and leave a comment", function () {
