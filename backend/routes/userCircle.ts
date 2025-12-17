@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
 import * as db from "../db/index.js";
-import type { Tier } from "../../frontend/src/types.js";
 
 const router = Router();
 
+type Tier = "Gold" | "Silver" | "Bronze";
 type UserCircleBody = {
   userId: string;
   circleId: number;

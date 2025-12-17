@@ -81,7 +81,7 @@ function JoinCircle({
     }
   };
 
-  const tiers: {value: Tier, label: Tier, price: string, color: string}[] = [
+  const tiers: { value: Tier; label: Tier; price: string; color: string }[] = [
     {
       value: "Bronze",
       label: "Bronze",
@@ -99,6 +99,7 @@ function JoinCircle({
 
   return modalType === "manage" ? (
     <Box
+      data-cy="manage-subscription"
       sx={{
         bgcolor: "var(--purple-dark)",
         width: "100%",
@@ -136,7 +137,11 @@ function JoinCircle({
         Cancel membership
       </Button>
       <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog variant="outlined" role="alertdialog">
+        <ModalDialog
+          data-cy="confirm-cancel"
+          variant="outlined"
+          role="alertdialog"
+        >
           <DialogTitle>
             <WarningRoundedIcon />
             Confirmation
@@ -162,6 +167,7 @@ function JoinCircle({
     </Box>
   ) : (
     <Box
+      data-cy="join-modal"
       sx={{
         bgcolor: "var(--purple-dark)",
         width: "100%",
@@ -183,6 +189,7 @@ function JoinCircle({
         Pick the tier for your membership:
       </p>
       <Box
+        data-cy="tiers-list"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -197,6 +204,7 @@ function JoinCircle({
       >
         {tiers.map((tier) => (
           <Box
+            data-cy={tier.value}
             key={tier.value}
             onClick={() => setChosenTier(tier.value)}
             sx={{
@@ -257,6 +265,7 @@ function JoinCircle({
         ))}
       </Box>
       <Button
+        data-cy="subscribe"
         type="submit"
         color="neutral"
         variant="solid"

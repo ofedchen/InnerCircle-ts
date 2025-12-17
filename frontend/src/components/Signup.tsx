@@ -146,9 +146,13 @@ const Signup = (props: SignUpProps) => {
   };
 
   return (
-    <section className="bg-(--purple-dark) w-full text-(--orange-main) px-6 py-8">
+    <section
+      data-cy="sign-up-container"
+      className="bg-(--purple-dark) w-full text-(--orange-main) px-6 py-8"
+    >
       <h2 className="text-2xl text-center">Sign up</h2>
       <form
+        data-cy="sign-up-form"
         className="bg-(--purple-dark) text-(--orange-main) px-4 py-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -160,7 +164,11 @@ const Signup = (props: SignUpProps) => {
         }}
       >
         <Stack spacing={1}>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <p data-cy="error-response" className="text-red-500 text-center">
+              {error}
+            </p>
+          )}
           <FormControl error={!validName && !!userName && !userFocus}>
             <FormLabel>Name</FormLabel>
             <Input
@@ -173,7 +181,7 @@ const Signup = (props: SignUpProps) => {
               autoComplete="off"
             />
             {userName && (
-              <FormHelperText>
+              <FormHelperText data-cy="username-err">
                 {validName ? "✓" : "Please enter your name"}
               </FormHelperText>
             )}
@@ -190,7 +198,7 @@ const Signup = (props: SignUpProps) => {
               autoComplete="disabled"
             />
             {email && (
-              <FormHelperText>
+              <FormHelperText data-cy="email-err">
                 {validEmail ? "✓" : "Please enter a valid email"}
               </FormHelperText>
             )}
@@ -212,7 +220,7 @@ const Signup = (props: SignUpProps) => {
               type={showPassword ? "text" : "password"}
               required
             />
-            <FormHelperText sx={{ fontSize: 12 }}>
+            <FormHelperText data-cy="pw-error" sx={{ fontSize: 12 }}>
               {validPwd
                 ? "✓"
                 : "8-24 characters with uppercase, lowercase, number, and special character (!@#$%()&)"}
@@ -221,6 +229,7 @@ const Signup = (props: SignUpProps) => {
           <FormControl error={!validMatch && !!matchPwd}>
             <FormLabel>Repeat password</FormLabel>
             <Input
+              data-cy="repeat-pw"
               onChange={(e) => setMatchPwd(e.target.value)}
               onBlur={() => setMatchFocus(false)}
               onFocus={() => setMatchFocus(true)}
@@ -230,7 +239,7 @@ const Signup = (props: SignUpProps) => {
               autoComplete="disabled"
             />
             {pwd && (
-              <FormHelperText>
+              <FormHelperText data-cy="repeat-pw-error">
                 {validMatch
                   ? "✓ Passwords match"
                   : "Passwords do not match, try again"}
@@ -239,6 +248,7 @@ const Signup = (props: SignUpProps) => {
           </FormControl>
           {validPwd && validMatch && (
             <Checkbox
+              data-cy="checkbox"
               label={checkboxLabel}
               variant="outlined"
               checked={agreedToTerms}
@@ -262,6 +272,7 @@ const Signup = (props: SignUpProps) => {
             Sign up
           </Button>
           <p
+            data-cy="switch-to-login"
             className="underline py-4 cursor-pointer"
             onClick={handleSwitchToLogin}
           >

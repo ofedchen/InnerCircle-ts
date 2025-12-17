@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "start": "vite",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cypress run"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",

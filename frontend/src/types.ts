@@ -1,14 +1,5 @@
 export type Tier = "Gold" | "Silver" | "Bronze";
 
-export type AvatarProps = {
-  src: string;
-  name?: string;
-  alt?: string;
-  className?: string;
-  tierColor?: Tier | null;
-  variant?: string;
-};
-
 export type LoginForm = {
   email: string;
   password: string;
