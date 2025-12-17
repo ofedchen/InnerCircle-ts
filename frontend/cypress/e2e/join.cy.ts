@@ -9,7 +9,7 @@ context("Join the circle or manage subscription", () => {
 
   beforeEach(() => {
     cy.clearLocalStorage(); 
-    cy.request("GET", `/api/user-circles/${existingUser.userId}`).then(
+    cy.request("GET", `http://localhost:3000/api/user-circles/${existingUser.userId}`).then(
       (response) => {
         const userCircle = response.body.find((uc: any) => uc.circle_id === 5);
         if (userCircle && userCircle.uc_id) {
@@ -78,7 +78,7 @@ context("Join the circle or manage subscription", () => {
   });
 
   it("cancels leaving the circle without cancelling subscription", () => {
-    cy.request("POST", "/api/user-circles/", {
+    cy.request("POST", "http://localhost:3000/api/user-circles/", {
       userId: existingUser.userId,
       circleId: 5,
       circleTier: "Gold",

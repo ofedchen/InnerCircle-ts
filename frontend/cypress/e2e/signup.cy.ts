@@ -140,7 +140,7 @@ context("Signup", () => {
     cy.getAllLocalStorage().then((result) => {
       const userId = result[Cypress.config().baseUrl!]?.userId;
       if (userId) {
-        cy.request("DELETE", `/api/users/${userId}`);
+        cy.request("DELETE", `http://localhost:3000/api/users/${userId}`);
       }
     });
   });
