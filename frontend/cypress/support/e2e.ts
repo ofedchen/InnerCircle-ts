@@ -14,4 +14,13 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands.ts'
+import "./commands.ts";
+
+import "@cypress/code-coverage/support";
+
+/* Cypress.Commands.overwrite("click", (originalFn, subject, options) => {
+	const result = originalFn(subject, options);
+	cy.wait(100);
+	return result;
+});
+ */

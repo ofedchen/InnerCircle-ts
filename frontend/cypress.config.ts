@@ -10,6 +10,14 @@ export default defineConfig({
 	},
 	e2e: {
 		baseUrl: "http://localhost:5173",
+		defaultCommandTimeout: 10000,
+		pageLoadTimeout: 60000,
+		requestTimeout: 10000,
+		responseTimeout: 30000,
+		setupNodeEvents(on, config) {
+			require("@cypress/code-coverage/task")(on, config);
+			return config;
+		},
 	},
 	experimentalStudio: true,
 });
