@@ -26,3 +26,4 @@ dist-ssr
 # tests
 coverage
 .nyc_output
+.nyc_output/out.json
