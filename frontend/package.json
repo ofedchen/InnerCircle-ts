@@ -9,7 +9,7 @@
     "start": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "cypress run"
+    "test": "nyc cypress run"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
@@ -32,6 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "@vitejs/plugin-react": "^5.0.4",
+    "check-code-coverage": "^1.10.5",
     "cypress": "^15.7.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^5.2.0",

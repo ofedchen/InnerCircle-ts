@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-cypress/e2e/1-getting-started
-cypress/e2e/2-advanced-examples
+# tests
 coverage
+.nyc_output
+.nyc_output/out.json
