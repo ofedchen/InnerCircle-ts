@@ -44,6 +44,17 @@ post_author  INTEGER,
 FOREIGN KEY (post_author) REFERENCES circle (circle_id)
 );
 
+CREATE TABLE comment (
+comment_id SERIAL PRIMARY KEY,
+comment_author uuid NOT NULL,
+FOREIGN KEY (comment_author) REFERENCES users (users_id),
+comment_text TEXT NOT NULL,
+comment_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+post_id INTEGER,
+FOREIGN KEY (post_id) REFERENCES post (post_id)
+ON DELETE CASCADE);
+
+
 INSERT INTO category (category_name, category_image)
 VALUES
 ('Surf', '/images/cat/surf.webp'),
@@ -176,6 +187,76 @@ VALUES
 ('Sky Leap', 'Falling from the sky at 25,000 feet is about trust, training, and pure adrenaline.', 'q7_rAEJc5-w', 'Gold', 24),
 ('Desert Drift', 'Motocross in harsh environments tests endurance and technique. The dust, heat, and noise make it all worth it.', 'zfH27y7FPes', 'Gold', 27),
 ('Focus Point', 'The hardest routes require silence, strength, and surrender. Every move tells a story of persistence.', '9WbCtgN6jK8', 'Gold', 10);
+
+INSERT INTO comment (comment_author, comment_text, comment_date, post_id)
+VALUES
+('ab71881f-dc4f-4481-a689-55e506679a5e', 'Really insightful post, thanks for sharing!', '2025-11-01 09:15:00+00', 67),
+
+('e92d107d-69d9-4ec1-9d1a-90daa9a5c41a', 'I had a similar experience and totally agree.', '2025-11-02 14:42:00+00', 74),
+
+('17129ae3-ba35-4b3f-bdc2-5083c09d868d', 'Can you expand a bit more on this topic?', '2025-11-03 18:10:00+00', 82),
+
+('84dca1bb-164b-453f-aea7-fffb3d09c656', 'This was super helpful, appreciate the breakdown!', '2025-11-04 11:05:00+00', 86),
+
+('6f8d1232-dd4e-48f6-83f9-98fb891257e0', 'Interesting perspective, I hadnt thought of it this way.', '2025-11-05 20:33:00+00', 90),
+
+('eb86f132-a85e-4923-98c2-4aeccd083d96', 'Nice work! Looking forward to more content like this.', '2025-11-06 08:50:00+00', 96),
+
+('e0c4c3e5-1e58-459d-8d55-984f81e8059d', 'This solved a problem I was stuck on all week.', '2025-11-07 16:22:00+00', 102),
+
+('fbd61a6d-4250-46c0-b3c9-8370b3dba50d', 'Great explanation, especially the last section.', '2025-11-08 10:17:00+00', 104),
+
+('f175a8ff-868c-474d-a259-b5c0a4c96dda', 'I disagree slightly, but I see your point.', '2025-11-09 13:55:00+00', 108),
+
+('0170907a-0550-4025-8753-5c0059ce8cfe', 'This is exactly what I needed today, thanks!', '2025-11-10 19:40:00+00', 114),
+
+('1f778f1c-b41e-4cd7-aca8-80fc0895e6e8', 'Clear, concise, and very useful.', '2025-11-11 07:30:00+00', 119);
+
+INSERT INTO comment (comment_author, comment_text, comment_date, post_id)
+VALUES
+-- Post 67
+('f2577192-a851-4cce-8104-2f0911d4e238', 'This post really cleared things up for me.', '2025-11-01 12:40:00+00', 67),
+('9cd9860b-8e72-4c36-abd9-a8ab8a9b7e0e', 'Would love to see a follow-up on this topic.', '2025-11-01 15:25:00+00', 67),
+
+-- Post 74
+('ab71881f-dc4f-4481-a689-55e506679a5e', 'The examples you used were spot on.', '2025-11-02 17:05:00+00', 74),
+('fbd61a6d-4250-46c0-b3c9-8370b3dba50d', 'Helped me understand the bigger picture.', '2025-11-02 21:48:00+00', 74),
+
+-- Post 82
+('e92d107d-69d9-4ec1-9d1a-90daa9a5c41a', 'This answered a question I have had for months.', '2025-11-03 09:20:00+00', 82),
+('f175a8ff-868c-474d-a259-b5c0a4c96dda', 'Not fully convinced, but interesting argument.', '2025-11-03 22:11:00+00', 82),
+
+-- Post 86
+('17129ae3-ba35-4b3f-bdc2-5083c09d868d', 'Very well written, easy to follow.', '2025-11-04 08:55:00+00', 86),
+('0170907a-0550-4025-8753-5c0059ce8cfe', 'I shared this with my team, super useful.', '2025-11-04 19:32:00+00', 86),
+
+-- Post 90
+('84dca1bb-164b-453f-aea7-fffb3d09c656', 'The comparison you made was really helpful.', '2025-11-05 10:45:00+00', 90),
+('1f778f1c-b41e-4cd7-aca8-80fc0895e6e8', 'I tried this approach and it worked perfectly.', '2025-11-05 23:18:00+00', 90),
+
+-- Post 96
+('6f8d1232-dd4e-48f6-83f9-98fb891257e0', 'Thanks for explaining this so clearly.', '2025-11-06 11:10:00+00', 96),
+('e0c4c3e5-1e58-459d-8d55-984f81e8059d', 'This saved me a ton of time today.', '2025-11-06 18:57:00+00', 96),
+
+-- Post 102
+('eb86f132-a85e-4923-98c2-4aeccd083d96', 'One of the best explanations I have seen.', '2025-11-07 09:42:00+00', 102),
+('f2577192-a851-4cce-8104-2f0911d4e238', 'Straight to the point, I like it.', '2025-11-07 21:05:00+00', 102),
+
+-- Post 104
+('9cd9860b-8e72-4c36-abd9-a8ab8a9b7e0e', 'This clarified a lot of confusion for me.', '2025-11-08 12:00:00+00', 104),
+('ab71881f-dc4f-4481-a689-55e506679a5e', 'The step-by-step format works really well here.', '2025-11-08 20:44:00+00', 104),
+
+-- Post 108
+('e92d107d-69d9-4ec1-9d1a-90daa9a5c41a', 'I appreciate how balanced this take is.', '2025-11-09 09:30:00+00', 108),
+('17129ae3-ba35-4b3f-bdc2-5083c09d868d', 'Some great points here, thanks for sharing.', '2025-11-09 22:15:00+00', 108),
+
+-- Post 114
+('84dca1bb-164b-453f-aea7-fffb3d09c656', 'This gave me a new way to approach the problem.', '2025-11-10 10:22:00+00', 114),
+('6f8d1232-dd4e-48f6-83f9-98fb891257e0', 'Clear and practical advice, nice.', '2025-11-10 17:49:00+00', 114),
+
+-- Post 119
+('eb86f132-a85e-4923-98c2-4aeccd083d96', 'Really strong conclusion at the end.', '2025-11-11 09:05:00+00', 119),
+('fbd61a6d-4250-46c0-b3c9-8370b3dba50d', 'This wraps up the topic nicely.', '2025-11-11 18:40:00+00', 119);
 
 
 CREATE INDEX idx_usercircle_user ON userCircle (uc_user_id);
