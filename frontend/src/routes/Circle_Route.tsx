@@ -95,7 +95,10 @@ export default function CirclePage() {
         </p>
         <p className="text-base text-(--orange-white) py-6">{circleBio}</p>
         {!isMember ? (
-          <div data-cy="join-the-circle" className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
+          <div
+            data-cy="join-the-circle"
+            className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md"
+          >
             <h2 className="text-lg text-(--purple-dark) pb-6">
               Become a part of {circleName} circle to access the exclusive
               content
@@ -109,7 +112,10 @@ export default function CirclePage() {
             />
           </div>
         ) : (
-          <div data-cy="membership" className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md">
+          <div
+            data-cy="membership"
+            className="flex flex-col items-center bg-(--purple-white) py-8 px-6 rounded-lg shadow-md"
+          >
             <h2 className="text-lg text-(--purple-dark)">
               You are a member of {circleName} circle
             </h2>
@@ -138,6 +144,7 @@ export default function CirclePage() {
 
             return (
               <section
+                data-cy="circle-posts"
                 key={p.post_id}
                 className="flex flex-col justify-center items-center px-4"
               >
