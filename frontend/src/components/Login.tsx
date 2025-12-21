@@ -20,7 +20,7 @@ const Login = (props: LoginProps) => {
 
   const navigate = useNavigate();
 
-  async function handleLogin(formData: AuthFormData) {
+  async function handleLogin(formData: Omit<AuthFormData, "userName">) {
     try {
       const response = await fetch("/api/login/", {
         method: "POST",
@@ -76,7 +76,7 @@ const Login = (props: LoginProps) => {
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries(
             formData.entries()
-          ) as AuthFormData;
+          ) as Omit<AuthFormData, "userName">;
           handleLogin(formJson);
         }}
       >

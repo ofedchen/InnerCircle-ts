@@ -1,17 +1,10 @@
 export type Tier = "Gold" | "Silver" | "Bronze";
 
-export type LoginForm = {
-	email: string;
-	password: string;
-};
-
-export type SignUpForm = {
+export type AuthFormData = {
 	userName: string;
 	email: string;
 	password: string;
 };
-
-export type AuthFormData = LoginForm | SignUpForm;
 
 export type CircleDetails = {
 	circle_id: number;
